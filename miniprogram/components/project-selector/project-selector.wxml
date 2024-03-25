@@ -1,0 +1,11 @@
+<view class="project-list">
+  <van-cell
+    wx:for="{{projects}}"
+    wx:key="_id"
+    title="{{item.name}}"
+    label="{{item.description}}"
+    bindtap="selectProject"
+    data-project="{{item}}"
+  >
+  </van-cell>
+</view>

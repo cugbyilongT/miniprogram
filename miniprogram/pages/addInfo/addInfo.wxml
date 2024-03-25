@@ -1,0 +1,32 @@
+
+<van-sidebar activeKey="{{ activeKey }}">
+  <van-sidebar-item title="step1 项目列表" />
+  <van-sidebar-item title="step2 任务列表" />
+  <van-sidebar-item title="step3 路段列表" />
+  <van-sidebar-item title="step4 施工日期" />
+  <van-sidebar-item title="step5 作业内容" />
+</van-sidebar>
+<view id="my-view">{{workInfo.type }}--{{workInfo.work }}</view>
+<view class="table-header" style="width: 472rpx; height: 92rpx; display: flex; box-sizing: border-box; position: relative; left: 211rpx; top: -675rpx">
+  <view class="table-cell">序号</view>
+  <view class="table-cell">添加</view>
+  <view class="table-cell" style="position: relative; left: 52rpx; top: 0rpx">操作</view>
+</view>
+
+<view style="position: relative; left: 256rpx; top: -750rpx">
+  <button class="my-button" bindtap="addRow" style="position: relative; left: 75rpx; top: 108rpx; width: 83rpx; height: 127rpx; display: block; box-sizing: border-box">新建</button>
+<table border="1" hidden="{{hidden}}" >
+    <template name="row" data="{{item}}">
+    <tr>
+      <td  style="position: relative; left: -47rpx; top: -33rpx">{{item.pureDateString}} </td>
+      <td><button class="my1-button" bindtap="upload"  style="position: relative; left: -24rpx; top: -52rpx; width: 118rpx; height: 99rpx; display: block; box-sizing: border-box"> + </button></td>
+      <td><button class="my1-button" bindtap="edit"  style="width: 136rpx; height: 97rpx; display: block; box-sizing: border-box; left: -45rpx; top: -52rpx; position: relative">编辑</button></td>
+      <td><button class="my1-button" bindtap="delete"  style="position: relative; left: -80rpx; top: -52rpx; width: 162rpx; height: 87rpx; display: block; box-sizing: border-box">删除</button></td>
+    </tr>
+    </template>
+
+  <tbody>
+    <template is="row" data="{{item}}" wx:for="{{rows}}" wx:key="index" ></template>
+  </tbody>
+</table>
+</view>

@@ -1,0 +1,28 @@
+<van-sidebar activeKey="{{ activeKey }}">
+  <van-sidebar-item title="step1 项目列表" disabled="{{ activeKey === 0 ? false : true }}" />
+  <van-sidebar-item title="step2 任务列表" disabled="{{ activeKey === 1? false : true }}" />
+  <van-sidebar-item title="step3 路段列表" disabled="{{ activeKey === 2 ? false : true }}" />
+  <van-sidebar-item title="step4 施工日期" disabled="{{ activeKey===3 ? false : true  }}" />
+  <van-sidebar-item title="step5 作业内容" disabled="{{ activeKey===4 ? false : true  }}" />
+</van-sidebar>
+
+<view class="content" style="width: 552rpx; height: 1374rpx; display: flex; box-sizing: border-box; position: relative; left: 149rpx; top: -685rpx">
+  <project-selector wx:if="{{activeKey === 0}}" projects="{{projects}}" bind:select="handleProjectSelect" style="max-height: 600rpx; overflow: auto;"></project-selector>
+  <task-selector wx:if="{{ activeKey === 1 }}" tasks="{{ selectedProject.tasks }}" bind:select="handleTaskSelect" bind:back="handleBackToProjectSelector" />
+  <section-selector wx:elif="{{activeKey === 2}}" sections="{{selectedTask.sections}}" bind:select="handleSectionSelect" bind:back="handleBackToTaskSelector" />
+
+  <van-calendar wx:elif="{{activeKey === 3}}" show="{{calendarShow}}" bind:close="handleBackToSectionSelector" bind:confirm="handleDateSelect" />
+  <view class="collapse-container">
+    <view  wx:if="{{activeKey === 4}}" class="back-btn" bindtap="handleBackToDataSelector"> 
+        <van-icon name="arrow-left" /> 返回日期
+         </view>
+        <van-collapse wx:if="{{activeKey === 4}}" value="{{ activeNames }}" bind:change="onChange">
+      <van-collapse-item wx:for="{{ works }}" wx:for-item="work" wx:for-index="outerIndex" title="{{work.worksType}}" custom-class="custom-collapse-item">
+        <van-cell wx:for="{{ work.worksDetail }}" wx:for-item="detail" wx:for-index="innerIndex" value="{{ detail.workName }}" data-outer-index="{{outerIndex}}" data-inner-index="{{innerIndex}}" custom-class="custom-cell" bind:tap="onCellClick" />
+      </van-collapse-item>
+    </van-collapse>
+
+</view>
+</view>
+
+
