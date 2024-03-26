@@ -6,7 +6,6 @@ Page({
    */
   data: {
     workInfo:{},
-
     message: [
       { type: 'input', infoName: '井号编号', label: '请输入井号编号', value: '' },
       { type: 'input', infoName: '井号编号', label: '请输入井号编号', value: '' },
@@ -80,7 +79,7 @@ Page({
   },
 
   handleInput(e) {
-    value = e.detail.value;
+    let value = e.detail.value;
     if (value.length > 10) {
       value = value.slice(0, 10);
     }
@@ -96,14 +95,14 @@ Page({
     console.log(this.data.message);
   },
   bindPickerChange(e) {
-    index = e.currentTarget.dataset.index;
-    value = e.detail.value;
+    let index = e.currentTarget.dataset.index;
+    let value = e.detail.value;
     console.log(index, value);
     this.updateMessageItem(index, 'value', value);
   },
   handleCheckboxChange(e) {
-    index = e.currentTarget.dataset.index;
-    value = e.detail.value; // 选中的checkbox的value值
+    let index = e.currentTarget.dataset.index;
+    let value = e.detail.value; // 选中的checkbox的value值
     console.log(index, value);
     this.updateMessageItem(index, 'value', value);
   },
@@ -142,7 +141,7 @@ Page({
           wx.showToast({ title: '上传成功', icon: 'none' });
           const newFileList = data.map(item => ({ url: item.fileID }));
           this.setData({ cloudPath: data, fileList: newFileList });
-          console.log(this.data.cloudPath);
+          console.log("云端位置",this.data.cloudPath);
           wx.hideLoading();
         })
         .catch(e => {

@@ -23,17 +23,6 @@ Page({
   },
 
   onCellClick(e) {
-    /*const outerIndex = e.currentTarget.dataset.index; // 获取外层循环的索引
-    const innerIndex = e.target.dataset.index; // 获取内层循环的索引
-    console.log(this.data.works,outerIndex,this.data.works[outerIndex])
-    const selectedWork = this.data.works[outerIndex].worksDetail[innerIndex]
-    console.log("selectedWork:",selectedWork)
-    this.setData({
-      selectedWork:  this.data.works[outerIndex].worksDetail[innerIndex],
-      activeKey: 4,
-    });
-    // 这里可以将数据传递给下一个页面，先使用JSON.stringify()将数据转换为字符串*/
-
     const workInfo = JSON.stringify({
       project_id: this.data.selectedProject._id,
       task: this.data.selectedTask.name,
@@ -44,8 +33,10 @@ Page({
      console.log("workInfo:",workInfo)},
     // 在这里执行跳转逻辑,可以使用 wx.navigateTo 等 API
 
-    
-
+    handleButtonTap: function(event) {
+      this.addRow();
+      this.upload(event);
+    },
 
     addRow() {
       const now = new Date(); // 获取当前时间
@@ -63,32 +54,6 @@ Page({
       const day = date.getDate().toString().padStart(2, '0'); // 补零
       return `${month}${day}`;
     },
-    
-  /*addRow() {
-      const now = new Date(); // 获取当前时间
-      const formattedDate = this.formatDate(now); // 格式化时间
-      const newRow = { 
-        pureDateString: formattedDate, // 设置 pureDateString 属性
-        // 其他属性
-      };
-      const rows = [...this.data.rows, newRow];
-      this.setData({ rows, hidden: false });
-    },
-
-    const rows = this.data.rows;
-    rows.push({ id: ++this.data.index });
-    this.setData({ rows, hidden: false });
-  
-    formatDate(date) {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 补零
-      const day = date.getDate().toString().padStart(2, '0'); // 补零
-      return `${year}-${month}-${day}`;
-    },
-
-
-
-  },*/
   upload(e) {
     const index = e.currentTarget.dataset.index;
     wx.navigateTo({
