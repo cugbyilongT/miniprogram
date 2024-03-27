@@ -93,3 +93,36 @@
     display: flex;
     align-items: center;
   }
+
+
+  .table-header-container {
+    position: absolute;
+
+  }
+  
+  .table-header {
+    display: flex;
+    flex-direction: row;
+    background-color: #0dd1d8;  /* 设置表头的背景颜色 */
+
+  }
+  
+  .table-cell {
+    padding: 10px;
+  }
+  .my-button {
+    width: 40px;
+    height: 50px;
+    font-size: 10px;
+    border: 1px solid black;
+  }
+  .my1-button {
+    width: 50px;
+    height: 100px;
+    font-size: 15px;
+  }
+  
+  tr {
+    display: flex;
+    height: 30px;
+  }

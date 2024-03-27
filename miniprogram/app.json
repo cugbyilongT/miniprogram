@@ -6,7 +6,6 @@
     "pages/fieldWorker/home/fieldWorker_home",
     "pages/officeWorker/home/officeWorker_home",
     "pages/projectManager/home/projectManager_home",
-    "pages/addInfo/addInfo",
     "pages/collectInfo/collectInfo"
   ],
   "window": {

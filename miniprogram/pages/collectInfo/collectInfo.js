@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    workInfo:{},
+    workInfo: {},
     message: [
       { type: 'input', infoName: '井号编号', label: '请输入井号编号', value: '' },
       { type: 'input', infoName: '井号编号', label: '请输入井号编号', value: '' },
@@ -40,7 +40,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-      console.log(this.data.workInfo);
+    console.log(this.data.workInfo);
   },
 
   /**
@@ -106,6 +106,7 @@ Page({
     console.log(index, value);
     this.updateMessageItem(index, 'value', value);
   },
+  /*
   chooseImage(e) {
     const { index } = e.currentTarget.dataset;
     wx.chooseImage({
@@ -120,49 +121,100 @@ Page({
       }
     });
   },
+  */
   // 上传图片
   uploadToCloud() {
     wx.cloud.init();
-    const { fileList } = this.data;
-    console.log("fileList", fileList)
-    // 上传图片
-    
-    // 1. 选择图片
-    // 2. 上传图片到云存储
-    // 3. 显示上传结果
-    if (!fileList.length) {
-      wx.showToast({ title: '请选择图片', icon: 'none' });
-    } else {
-      wx.showLoading({ title: '上传中' });
-      const file_name = `${this.data.workInfo.project_id}-${this.data.workInfo.task}-${this.data.workInfo.section}-${this.data.workInfo.work_time}-${this.data.workInfo.work}`.split('/').join('.');
-      const uploadTasks = fileList.map((file, index) => this.uploadFilePromise(`${file_name}-第${index}张图片.png`,       file));
-      Promise.all(uploadTasks)
-        .then(data => {
-          wx.showToast({ title: '上传成功', icon: 'none' });
-          const newFileList = data.map(item => ({ url: item.fileID }));
-          this.setData({ cloudPath: data, fileList: newFileList });
-          console.log("云端位置",this.data.cloudPath);
-          wx.hideLoading();
-        })
-        .catch(e => {
-          wx.showToast({ title: '上传失败', icon: 'none' });
-          console.log(e);
-        });
-    }
+    wx.showLoading({ title: '上传中' });
+  
+    const uploadTasks = this.getUploadTasks();
+  
+    Promise.all(uploadTasks)
+      .then(data => {
+        wx.showToast({ title: '上传成功', icon: 'none' });
+        const newFileList = data.map(item => ({ url: item.fileID }));
+        this.setData({ cloudPath: data, fileList: newFileList });
+        console.log("云端位置", this.data.cloudPath);
+      })
+      .catch(e => {
+        wx.showToast({ title: '上传失败', icon: 'none' });
+        console.log(e);
+      })
+      .finally(() => {
+        wx.hideLoading();
+      });
   },
-
+  
+  getUploadTasks() {
+    const uploadTasks = [];
+  
+    for (let i = 0; i < this.data.message.length; i++) {
+      if (this.data.message[i].type === 'upload') {
+        const fileNames = this.getFileNames(i);
+        const fileBatches = this.data.message[i].value;
+        const fileTasks = fileBatches.map((file, index) =>{
+          const res = this.uploadFilePromise(`${this.getFileNames(i)}-第${index + 1}张图片.png`, file).then(result => {
+            return result.fileID;
+          });
+          this.data.message[i].value[index].url = res;
+          return res;
+        }
+          
+        );
+        uploadTasks.push(...fileTasks);
+      }
+    }
+    console.log("uplaodTasks", uploadTasks);
+    return uploadTasks;
+  },
+  
+  getFileNames(index = -1) {
+    console.log(this.data.workInfo);
+    const { project, task, section, work_time, work } = this.data.workInfo;
+    const baseName = `${this.data.workInfo.selectedProject.name}-${this.data.workInfo.selectedTask.name}-${this.data.workInfo.selectedSection.road}-${this.data.workInfo.selectedDate}-${this.data.workInfo.selectedWork.workName}`;
+    return index === -1 ? baseName : `${baseName}-第${index}批次`;
+  },
+  
   uploadFilePromise(fileName, chooseResult) {
-    return wx.cloud.uploadFile({
-      cloudPath: fileName,
-      filePath: chooseResult.url
+    return new Promise((resolve, reject) => {
+      const filePath = chooseResult.url;
+      const cloudPath = `uploads/${fileName}`;
+  
+      const uploadTask = wx.cloud.uploadFile({
+        cloudPath,
+        filePath,
+        success: res => {
+          console.log('上传成功', res.fileID);
+          resolve({ fileID: res.fileID });
+        },
+        fail: err => {
+          console.error('上传失败', err);
+          reject(err);
+        }
+      });
+  
+      uploadTask.onProgressUpdate(progress => {
+        console.log(`上传进度：${progress.progress}%`);
+      });
     });
   },
+  
   afterRead(event) {
-    const { fileList } = this.data;
-    fileList.push(event.detail.file);
-    this.setData({ fileList });
+    const { file } = event.detail;
+    const index = event.target.dataset.index;
+    const filevalue = this.data.message[index].value;
+    filevalue.push(file);
+    this.updateMessageItem(index, 'value', filevalue);
+  },
+  /*
+  afterRead(event) {
+    const  {fileList}  =event.detail;
+    const index = event.target.dataset.index;
+    this.data.message[index].value.push(fileList)
+    console.log(this.data.message)
     //this.uploadToCloud(fileList);
   },
+  */
   deleteFile(event) {
     const { fileList } = this.data;
     const { index } = event.currentTarget.dataset;
@@ -174,17 +226,24 @@ Page({
     console.log(fileList);
     this.uploadToCloud(fileList);
   },
-  getMap(event){
+  getMap(event) {
     wx.getLocation({
       type: 'gcj02',
-      isHighAccuracy:'true',
+      isHighAccuracy: 'true',
       success: (res) => {
         const { latitude, longitude } = res;
         console.log(latitude, longitude);
         this.updateMessageItem(4, 'value', { latitude, longitude });
-      } 
-  })
+      }
+    })
 
-  console.log(latitude, longitude);
-}
+    console.log(latitude, longitude);
+  },
+  submitwork(event) {
+    console.log(this.data.message);
+    this.uploadToCloud();
+    console.log(this.data.message);
+
+  }
+
 })

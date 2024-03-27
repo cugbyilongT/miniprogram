@@ -21,4 +21,42 @@
       </van-collapse-item>
     </van-collapse>
   </view>
+        <view wx:if="{{activeKey === 5}}" class="back-btn" bindtap="handleBackToWorkSelector">
+      <van-icon name="arrow-left" />
+      返回作业内容
+    </view>
+   <view wx:if="{{activeKey === 5}}">
+    <view class="titel" style="position: absolute; left: 150rpx; top: -106rpx" > 
+      {{selectedworktype.worksType }}--{{selectedWork.workName}}
+    </view>
+    <view class="table-header"  style=" position: relative; left: 10rpx; top: 0rpx;width: 480rpx; height: 100rpx; display: flex; box-sizing: border-box" >
+      <view class="table-cell" style="position: relative; left: 30rpx; top: 0rpx">序号</view>
+      <view class="table-cell" style="position: relative; left: 150rpx; top: 0rpx" >操作</view>
+    </view>
+    <view>
+      <button class="my-button" style="position: relative; left: 290rpx; top: 30rpx" bindtap="handleButtonTap">
+        新建
+      </button>
+      <table border="1" hidden="{{hidden}}">
+        <template name="row" data="{{item}}">
+          <tr>
+            <td style="position: relative; left: 50rpx; top: -110rpx"> {{item.pureDateString}}</td>
+            <td>
+              <button class="my1-button" bindtap="edit"  style="position: relative; left: 100rpx; top: -130rpx; width: 141rpx; height: 85rpx; display: block; box-sizing: border-box">
+                编辑
+              </button>
+            </td>
+            <td>
+              <button class="my1-button" bindtap="delete"  style="position: relative; left: 100rpx; top: -130rpx; width: 150rpx; height: 90rpx; display: block; box-sizing: border-box">
+                删除
+              </button>
+            </td>
+          </tr>
+        </template>
+        <tbody>
+          <template is="row" data="{{item}}" wx:for="{{rows}}" wx:key="index"></template>
+        </tbody>
+      </table>
+    </view>
+  </view> 
 </view>

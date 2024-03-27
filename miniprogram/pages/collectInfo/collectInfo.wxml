@@ -20,9 +20,9 @@
       </label>
     </checkbox-group>
   </view>
-  <view class='collectPhoto' wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'upload'}}">
+  <view class='collectPhoto' wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'upload'}}" >
     <view>{{item.infoName}}</view>
-    <van-uploader  file-list="{{ fileList }}"  max-count="3"  bind:after-read="afterRead"  bind:delete="deleteFile" >
+    <van-uploader   max-count="3"  bind:after-read="afterRead"  bind:delete="deleteFile" data-index="{{index}}" file-list="{{ message[index].value }}">
      </van-uploader> 
         <van-button  type="primary" size="large" icon="photo"  bind:click="handleUpload">提交</van-button>
 
@@ -31,4 +31,5 @@
     <view>{{item.infoName}}</view>
     <van-button  type="primary" size="large" icon="photo"  bind:click="getMap">获取当前位置</van-button>
   </view>  
+  <van-button  type="primary" size="large" icon="photo"  bind:click="submitwork">提交</van-button>
 </view>
