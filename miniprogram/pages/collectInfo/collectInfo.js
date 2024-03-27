@@ -26,8 +26,29 @@ Page({
     //使用JSON.parse将字符串转为对象
     const workInfo = JSON.parse(options.workInfo);
     this.setData({ workInfo });
-    console.log(this.data.workInfo);
+    wx.cloud.callFunction({
+      name: 'getWork',
+
+      data: {
+        _id: workInfo._id
+      }
+      }).then(res => {
+        console.log(res.result);
+        this.setData({
+          workInfo: res.result.data[0]
+        });
+        if(this.data.workInfo.message!== undefined){
+          this.setData({
+            message: this.data.workInfo.message
+          });
+        }
+        console.log(this.data.workInfo);
+      })
+     .catch(err => {
+        console.error(err);
+      });
   },
+    
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -106,30 +127,15 @@ Page({
     console.log(index, value);
     this.updateMessageItem(index, 'value', value);
   },
-  /*
-  chooseImage(e) {
-    const { index } = e.currentTarget.dataset;
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const { tempFilePaths } = res;
-        const { fileList } = this.data;
-        fileList[index] = tempFilePaths;
-        this.setData({ fileList });
-      }
-    });
-  },
-  */
   // 上传图片
-  uploadToCloud() {
+  uploadPicToCloud() {
     wx.cloud.init();
     wx.showLoading({ title: '上传中' });
   
     const uploadTasks = this.getUploadTasks();
+    console.log("old message", this.data.message);
   
-    Promise.all(uploadTasks)
+    return Promise.all(uploadTasks)
       .then(data => {
         wx.showToast({ title: '上传成功', icon: 'none' });
         const newFileList = data.map(item => ({ url: item.fileID }));
@@ -139,6 +145,8 @@ Page({
       .catch(e => {
         wx.showToast({ title: '上传失败', icon: 'none' });
         console.log(e);
+        // 如果上传失败,返回一个 rejected 的 Promise 对象
+        return Promise.reject(e);
       })
       .finally(() => {
         wx.hideLoading();
@@ -147,16 +155,20 @@ Page({
   
   getUploadTasks() {
     const uploadTasks = [];
-  
     for (let i = 0; i < this.data.message.length; i++) {
       if (this.data.message[i].type === 'upload') {
         const fileNames = this.getFileNames(i);
         const fileBatches = this.data.message[i].value;
         const fileTasks = fileBatches.map((file, index) =>{
           const res = this.uploadFilePromise(`${this.getFileNames(i)}-第${index + 1}张图片.png`, file).then(result => {
+            console.log('上传成功',res.result, result,result.fileID);
+            const newMessage =this.data.message;
+            newMessage[i].value[index].url = result.fileID;
+            this.setData({ message: newMessage });
+            console.log('上传成功', this.data.message);
             return result.fileID;
           });
-          this.data.message[i].value[index].url = res;
+          
           return res;
         }
           
@@ -170,8 +182,9 @@ Page({
   
   getFileNames(index = -1) {
     console.log(this.data.workInfo);
-    const { project, task, section, work_time, work } = this.data.workInfo;
-    const baseName = `${this.data.workInfo.selectedProject.name}-${this.data.workInfo.selectedTask.name}-${this.data.workInfo.selectedSection.road}-${this.data.workInfo.selectedDate}-${this.data.workInfo.selectedWork.workName}`;
+    const { Project, Task, Section, DateMouthDay, Work } = this.data.workInfo;
+    const baseName = `${Project}-${Task}-${Section}-${DateMouthDay}-${Work}`;
+    baseName.replace(/\s+/g, '');
     return index === -1 ? baseName : `${baseName}-第${index}批次`;
   },
   
@@ -179,7 +192,7 @@ Page({
     return new Promise((resolve, reject) => {
       const filePath = chooseResult.url;
       const cloudPath = `uploads/${fileName}`;
-  
+      console.log(filePath, cloudPath);
       const uploadTask = wx.cloud.uploadFile({
         cloudPath,
         filePath,
@@ -204,17 +217,10 @@ Page({
     const index = event.target.dataset.index;
     const filevalue = this.data.message[index].value;
     filevalue.push(file);
+    console.log(index,filevalue);
     this.updateMessageItem(index, 'value', filevalue);
   },
-  /*
-  afterRead(event) {
-    const  {fileList}  =event.detail;
-    const index = event.target.dataset.index;
-    this.data.message[index].value.push(fileList)
-    console.log(this.data.message)
-    //this.uploadToCloud(fileList);
-  },
-  */
+
   deleteFile(event) {
     const { fileList } = this.data;
     const { index } = event.currentTarget.dataset;
@@ -224,7 +230,7 @@ Page({
   handleUpload(event) {
     const { fileList } = this.data;
     console.log(fileList);
-    this.uploadToCloud(fileList);
+    this.uploadPicToCloud(fileList);
   },
   getMap(event) {
     wx.getLocation({
@@ -240,10 +246,42 @@ Page({
     console.log(latitude, longitude);
   },
   submitwork(event) {
-    console.log(this.data.message);
-    this.uploadToCloud();
-    console.log(this.data.message);
-
-  }
+    this.uploadPicToCloud()
+      .then(() => {
+        // 等待上传完成后再执行上传消息到云端的操作
+        this.uploadMessageToCloud();
+      })
+      .catch(err => {
+        console.error('上传图片失败:', err);
+        wx.showToast({ title: '上传失败', icon: 'none' });
+      });
+  },
+  uploadMessageToCloud() {
+    const { message, workInfo } = this.data;
+    const { _id } = workInfo;
+    console.log(_id);
+    console.log("uploadMessageToCloud", message);
+    wx.cloud.callFunction({
+      name: 'updateWork',
+      data: {
+        _id,
+        message
+      }
+    })
+    .then(res => {
+      console.log(res.result);
+      if (res.result.success) {
+        wx.showToast({ title: '信息更新成功', icon: 'none' });
+      } else {
+        wx.showToast({ title: '信息更新失败', icon: 'none' });
+        console.error(res.result.error);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      wx.showToast({ title: '信息更新失败', icon: 'none' });
+    });
+  },
+    
 
 })
