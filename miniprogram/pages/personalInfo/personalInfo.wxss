@@ -1,0 +1,15 @@
+button {
+    padding: 6px 20px; /* 增加填充，使按钮更大，更容易点击 */
+    border: 1px solid #ccc; /* 默认边框 */
+    background-color: #f8f8f8; /* 默认背景色 */
+    color: #333; /* 默认文字颜色 */
+    border-radius: 4px; /* 轻微的圆角边框，提升美观度 */
+    transition: all 0.3s ease; /* 平滑过渡效果应用于所有属性改变 */
+    cursor: pointer; /* 显示手型光标，表明这是一个可点击的元素 */
+    margin-top: 20px; /* 下移按钮，数值可根据需要调整 */
+  }
+
+  button:focus {
+    outline: none; /* 移除焦点时的轮廓线 */
+    box-shadow: 0 0 5px 2px rgba(43, 211, 107, 0.5); /* 焦点状态时添加阴影，提高可见性 */
+  }

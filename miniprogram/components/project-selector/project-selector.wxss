@@ -1,0 +1,7 @@
+/* components/project-selector/project-selector.wxss */
+.project-list {
+  
+  height: 1000rpx; /* 限制最大高度 */
+  width: 500rpx;
+  overflow-y: auto; /* 启用垂直滚动 */
+}

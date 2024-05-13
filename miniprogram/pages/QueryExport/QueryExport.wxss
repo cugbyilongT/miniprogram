@@ -1,0 +1,218 @@
+
+.my-text {
+    position:absolute;
+    top: 0px; /* 距离顶部 10px */
+    right:350px; /* 距离右侧 10px */
+    font-size: 20px;
+    color: #333;
+    /* 其他样式 */
+  }
+  .my-text1 {
+    position:absolute;
+    top: 0px; /* 距离顶部 10px */
+    right: 150px; /* 距离右侧 10px */
+    font-size: 25px;
+    color: #333;
+    /* 其他样式 */
+  }
+  .my-button{
+    width: 100px; /* 指定按钮的宽度 */
+    height: 50px; /* 指定按钮的高度 */
+    line-height: 50px; /* 设置行高与按钮高度相同来垂直居中文本 */
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    font-size: 15px;
+    color: #FFFFFF; /* 更改文本颜色为白色，以提高对比度 */
+    background-color: #157575; /* 添加背景颜色，与边框颜色相同 */
+    border-top: 2px solid #FFFFFF; /* 上边框改为白色 */
+    border-right: 2px dashed #FFFFFF; /* 右边框改为白色虚线 */
+    border-bottom: 2px dotted #FFFFFF; /* 下边框改为白色点线 */
+    border-left: 2px solid #FFFFFF; /* 左边框改为白色 */
+    padding: -5px 2px; /* 添加内边距，以便有足够的空间包围文本 */
+    border-radius: 5px; /* 添加边框圆角，使按钮看起来更光滑 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影效果，增加立体感 */
+    transition: background-color 0.3s ease; /* 添加过渡效果，使颜色改变更平滑 */
+  }
+  
+  .container {
+    padding:100px;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+  }
+  
+  .dropdown-label {
+    /* Label styles */
+    display: flex;
+    align-items: center;
+  }
+  .dropdown-input-container {
+    display: flex;
+    align-items: center;
+}
+  .dropdown-input {
+    flex-grow: 1;
+    display: flex;
+    width: 300px;
+    padding: 8px 12px;
+    border: 2px solid #1c1d1f;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-size: 16px;
+    /* Input box styles */
+  }
+  .dropdown-option {
+    /* Individual option styles */
+    display: flex; /* 启用 Flexbox 布局 */
+    align-items: center; /* 垂直居中对齐子项目 */
+    margin-bottom: 10rpx; /* 为每个标签提供底部间距 */
+  }
+  .checkbox {
+    margin-right: 5px; /* 在复选框和文本之间添加一些间距 */
+    
+  }
+  /* Display options when they should be shown */
+  .dropdown-options-active {
+    display: block;
+  }
+  
+  /* 确保复选框和其后的文本在同一行内 */
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    display: flex; /* 使用Flexbox布局 */
+    align-items: center; /* 垂直居中对齐 */
+    white-space: nowrap; /* 防止文本换行 */
+    margin-bottom: 10rpx; /* 可选：增加标签之间的间距 */
+  }
+  .option-item {
+    display: block;
+    padding: 5px;
+    /* Add additional styles as needed */
+  }
+  .dropdown-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0); /* 完全透明 */
+    z-index: 10; /* 请确保这个值足够高，能覆盖其他内容 */
+  }
+  
+  
+  /* pages/your-page/your-page.wxss */
+  /* 调整整体 view 组件的样式 */
+  .query-result-item {
+    padding: 10px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+  }
+  
+  /* 调整 text 组件的样式 */
+  .query-result-item text {
+    display: block; /* 让 text 占据整行 */
+    color: #333;
+    margin-bottom: 5px; /* 添加间距 */
+    font-size: 14px;
+  }
+  
+  /* 为日期设置特定的样式 */
+  .query-result-item .date-text {
+    color: #666;
+    font-weight: bold;
+  }
+  
+  /* 为项目名称设置特定的样式 */
+  .query-result-item .project-text {
+    color: #1a1a1a;
+    font-weight: bold;
+  }
+  
+  
+  
+  /* page.wxss */
+  .container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* 确保容器宽度为100% */
+  }
+  
+  .form-item {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    margin-bottom: 10px; /* 只设置一次即可 */
+    flex-direction: row; /* 显式设置为横向排列 */
+    width: 100%; /* 确保父容器宽度为100%，以便子元素有足够空间横向排列 */
+  }
+  
+  .form-label {
+    width: 100px; /* 标签固定宽度 */
+    font-size: 15px;
+    color: #111010;
+  }
+  
+  
+  .form-input {
+    flex-grow: 1; /* 输入框占据剩余空间 */
+  }
+  
+  
+  .form-input input,
+  .form-input picker {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .submit-button {
+    width: 100%;              /* 提交按钮宽度调整为100% */
+    background-color: #19ca63; /* 按钮背景颜色 */
+    color: white;              /* 按钮文字颜色 */
+    border: none;              /* 去除边框 */
+    padding: 10px 10px;        /* 增加上下内边距 */
+    border-radius: 5px;        /* 圆角边框 */
+  
+    /* 文本居中显示 */
+    text-align: center;        /* 水平居中 */
+    line-height: normal;       /* 重置行高，可能需要调整具体值 */
+    display: flex;             /* 使用flexbox进行布局 */
+    justify-content: center;   /* 水平居中 */
+    align-items: center;       /* 垂直居中 */
+  }
+  .dropdown-button {
+    display: flex;
+    line-height: 30px; /* 设置行高与按钮高度相同 */
+    padding-left: 10px; /* 增加左内边距，内容向右移动 */
+    background-color: #f9f9f9; /* 浅灰色背景 */
+    border: 1px solid #ccc; /* 浅灰色边框 */
+    border-radius: 5px; /* 轻微的圆角 */
+    cursor: pointer;
+    width: 35px; /* 设置按钮的宽度 */
+    height: 35px; /* 设置按钮的高度 */
+    display: flex;
+    justify-content: center; /* 水平居中显示箭头 */
+    align-items: center; /* 垂直居中显示箭头 */
+    font-size: 16px; /* 调整箭头大小，假设箭头是文本字符 */
+    transition: background-color 0.3s, transform 0.3s; /* 添加背景色和变换的过渡效果 */
+}
+.dropdown-input, .dropdown-button {
+  display: inline-block;
+  vertical-align: middle; /* 这确保对齐如果他们的高度不同 */
+}

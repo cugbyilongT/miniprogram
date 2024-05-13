@@ -1,0 +1,35 @@
+<view class="collectBody">
+  <view class='collectText' wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'input'}}">
+    <view>{{item.infoName}}</view>
+    <input style="width: 750rpx; height: 85rpx; display: block; box-sizing: border-box" value="{{item.value}}" data-index="{{index}}" bindinput="handleInput" class="input-field" type="text" placeholder="{{item.label}}" />
+  </view>
+  <view class='collectSelect' wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'select'}}">
+    <view>{{item.infoName}}</view>
+    <picker mode="selector" value="{{item.value}}" range="{{item.options}}" data-index="{{index}}" class="select-field" bindchange="bindPickerChange" style="width: 750rpx; height: 100rpx; display: block; box-sizing: border-box">
+      <view class="picker" style="width: 710rpx; height: 64rpx; display: block; box-sizing: border-box">
+        当前选择：{{item.options[item.value]}}
+      </view>
+    </picker>
+  </view>
+  <view class='collectCheckbox' wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'checkbox'}}">
+    <view>{{item.infoName}}</view>
+    <checkbox-group style="margin-top: 20rpx" data-index="{{index}}" class='collectCheckbox' bindchange="handleCheckboxChange">
+      <label wx:for="{{item.options}}" wx:key="index" class="checkbox-label" data-index="{{index}}">
+        <checkbox value="{{item}}" data-index="{{index}}" class="checkbox-field" />
+        {{item}}
+      </label>
+    </checkbox-group>
+  </view>
+  <view class='collectPhoto' wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'upload'}}" >
+    <view>{{item.infoName}}</view>
+    <van-uploader   max-count="3"  bind:after-read="afterRead"  bind:delete="deleteFile" data-index="{{index}}" file-list="{{ message[index].value }}">
+     </van-uploader> 
+        <van-button  type="primary" size="large" icon="photo"  bind:click="handleUpload">提交</van-button>
+
+  </view>
+  <view class="collectAddress" wx:for="{{message}}" wx:key="index" wx:if="{{item.type === 'address'}}">
+    <view>{{item.infoName}}</view>
+    <van-button  type="primary" size="large" icon="photo"  bind:click="getMap">获取当前位置</van-button>
+  </view>  
+  <van-button  type="primary" size="large" icon="photo"  bind:click="submitwork">提交</van-button>
+</view>

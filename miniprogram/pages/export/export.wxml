@@ -1,0 +1,15 @@
+<view class="container">
+  <block wx:for="{{dropdowns}}" wx:key="index" data-index="{{index}}">
+    <view class="section">
+      <text class="label">{{item.label}}</text>
+      <input class="input" type="text" bindinput="onInput" bindfocus="onFocus" bindblur="onBlur" data-index="{{index}}" value="{{item.inputValue}}" placeholder="{{item.placeholder}}" />
+      <view class="dropdown" wx:if="{{item.showDropdown}}">
+        <scroll-view class="dropdown-scroll-view" scroll-y="true" style="max-height: 200px;">
+          <view class="dropdown-item" wx:for="{{item.options}}" wx:key="option" bindtap="onSelectItem" data-index="{{index}}" data-value="{{option}}">
+            {{option}}
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </block>
+</view>

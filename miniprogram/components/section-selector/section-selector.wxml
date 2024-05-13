@@ -1,0 +1,12 @@
+<view class="back-btn" bindtap="handleBackToTask">
+  <van-icon name="arrow-left" /> 返回派工单列表
+</view>
+<view class="section-list" style="position: relative; left: 0rpx; top: 69rpx">
+  <van-cell inset size="large" 
+  wx:for="{{sections}}" 
+  wx:key="index" 
+  title="{{ item.road }}" 
+  label="{{ item.description }}" 
+  bind:click="selectSection" 
+  data-section="{{ item }}" />
+</view>

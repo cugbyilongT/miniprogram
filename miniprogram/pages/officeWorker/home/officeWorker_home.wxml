@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="header">
+    <text class="title">外业作业人员</text>
+  </view>
+
+  <view class="search-bar">
+    <input class="search-input" placeholder="项目名称" bindinput="searchProjects" />
+  </view>
+
+  <view class="project-list">
+    <view class="project-item" wx:for="{{filteredProjects}}" wx:key="index">
+      <text class="project-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <view class="empty-tip" wx:if="{{filteredProjects.length === 0}}">
+    暂无相关项目
+  </view>
+</view>

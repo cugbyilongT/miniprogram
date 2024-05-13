@@ -1,0 +1,873 @@
+{
+    "_id": "63ca5b1365f15ba0021c8d6b1c5e08c8",
+    "name": "大龙街2024年排水管网清、查",
+    "description": "项目描述",
+    "location": "项目地点",
+    "startDate": {
+        "$date": "2024-03-13T08:12:09.735Z"
+    },
+    "endDate": {
+        "$date": "2024-03-13T08:12:09.735Z"
+    },
+    "manager": "李嘉辉",
+    "tasks": [
+        {
+            "name": "清疏检测",
+            "description": "大龙街清疏检测",
+            "sections": [
+                {
+                    "road": "大龙街道",
+                    "works": [
+                        {
+                            "worksType": "作业准备",
+                            "worksDetail": [
+                                {
+                                    "workName": "安全交底",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "安全围蔽",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "安全标志",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "交通疏解",
+                                    "workFlag": true
+                                }
+                            ]
+                        },
+                        {
+                            "worksType": "有限空间作业",
+                            "worksDetail": [
+                                {
+                                    "workName": "作业审批",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "气体检测",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "鼓风机",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "安全许可",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "下井作业",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "潜水封堵",
+                                    "workFlag": true
+                                }
+                            ]
+                        },
+                        {
+                            "worksType": "措施项目",
+                            "worksDetail": [
+                                {
+                                    "workName": "发电机组",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "污水泵",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "消防水带",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "非潜水封堵",
+                                    "workFlag": true
+                                }
+                            ]
+                        },
+                        {
+                            "worksType": "场外作业",
+                            "worksDetail": [
+                                {
+                                    "workName": "CCTV检测",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "QV检测",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "管道清淤",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "井室清淤",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "清罐",
+                                    "workFlag": true
+                                }
+                            ]
+                        },
+                        {
+                            "worksType": "场内作业",
+                            "worksDetail": [
+                                {
+                                    "workName": "小修",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "修复台账",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workName": "特殊情况",
+                                    "workFlag": true
+                                },
+                                {
+                                    "workFlag": true,
+                                    "workName": "清疏台账"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "members": [
+        "杨怡",
+        "唐毅龙",
+        "黎颖",
+        "卢本虾"
+    ],
+    "createdAt": {
+        "$date": "2024-03-13T08:12:09.735Z"
+    },
+    "updatedAt": {
+        "$date": "2024-03-13T08:12:09.735Z"
+    },
+    "work_message": {
+        "安全交底": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "施工内容安全交底（班前）", "label": "请上传安全交底照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "安全围蔽": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "车前", "label": "请上传车前照片", "type": "upload", "value": [] },
+                { "infoName": "车中", "label": "请上传车中照片", "type": "upload", "value": [] },
+                { "infoName": "车后", "label": "请上传车后照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+
+            ]
+        },
+        "安全标志": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "安全标识", "label": "请上传安全标识照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "交通疏解": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "交通疏解", "label": "请上传交通疏解照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "作业审批": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "作业审批", "label": "请上传作业审批照片", "type": "upload", "value": []},
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "气体检测": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "气体检测", "label": "请上传气体检测照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "鼓风机": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "鼓风机", "label": "请上传鼓风机照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "安全许可": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "安全许可", "label": "请上传安全许可照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "下井作业": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "下井作业", "label": "请上传下井作业照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "潜水封堵气囊": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "潜水封堵气囊", "label": "请上传潜水封堵气囊照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "潜水拆除气囊": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "潜水拆除气囊", "label": "请上传潜水拆除气囊照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "发电机组": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "发电机组", "label": "请上传发电机组照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "污水泵": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "污水泵", "label": "请上传污水泵照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "消防水带": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "消防水带", "label": "请上传消防水带照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "非潜水封堵": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "非潜水封堵", "label": "请上传非潜水封堵照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "CCTV检测": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "CCTV检测", "label": "请上传CCTV检测照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "QV检测": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "QV检测", "label": "请上传QV检测照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "管道清淤": {
+
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "管道清淤", "label": "请上传管道清淤照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "井室清淤": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "井室清淤", "label": "请上传井室清淤照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "清罐": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "清罐", "label": "请上传清罐照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "小修": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "小修", "label": "请上传小修照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "修复台账": {
+            "message": [
+                {
+                    "infoName": "分区代码",
+                    "label": "请输入分区",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "所属污水处理系统",
+                    "value": "前锋污水处理系统",
+                    "type": "input"
+                },
+                {
+                    "infoName": "",
+                    "value": "",
+                    "type": "input",
+                    "label": ""
+                },
+                {
+                    "infoName": "村居",
+                    "value": "/",
+                    "type": "input",
+                    "label": "/"
+                },
+                {
+                    "infoName": "道路名称",
+                    "label": "请输入道路名称",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "路段地址",
+                    "label": "请输入路段地址",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "涉及河涌",
+                    "label": "请输入河涌",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "涉及内涝点",
+                    "value": "/",
+                    "type": "input",
+                    "label": "/"
+                },
+                {
+                    "value": "",
+                    "infoName": "任务来源",
+                    "label": "请选择任务来源",
+                    "tpye": "select",
+                    "options": [
+                        "日常清疏",
+                        "一雨三清",
+                        "70公里渠箱清疏"
+                    ]
+                },
+                {
+                    "options": [
+                        "W",
+                        "H",
+                        "Y"
+                    ],
+                    "type": "select",
+                    "value": "",
+                    "infoName": "管道性质",
+                    "label": "请选择管道性质"
+                },
+                {
+                    "infoName": "清疏对象",
+                    "label": "请选择清疏对象",
+                    "options": [
+                        "管道",
+                        "明渠",
+                        "篦子"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "管道类别",
+                    "type": "input",
+                    "value": "常规管道",
+                    "label": "常规管道"
+                },
+                {
+                    "infoName": "管道材质砼/HDPE/钢管/PE",
+                    "label": "请选择管道材质",
+                    "options": [
+                        "砼",
+                        "HDPE",
+                        "钢管",
+                        "PE"
+                    ],
+                    "tpye": "select",
+                    "value": ""
+                },
+                {
+                    "label": "请输入起始井号",
+                    "type": "input",
+                    "value": "",
+                    "infoName": "起始井号"
+                },
+                {
+                    "value": "",
+                    "infoName": "终点井号",
+                    "label": "请输入终点井号",
+                    "tpye": "input"
+                },
+                {
+                    "infoName": "井数/篦子数（个）",
+                    "label": "请选择井数/篦子数（个）",
+                    "options": [
+                        "1",
+                        "/"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "管径/尺寸",
+                    "label": "请输入管径/尺寸",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "管道长度（米）",
+                    "label": "请输入管道长度",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "infoName": "明渠长度（米）",
+                    "label": "请输入明渠长度（米）",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "type": "input",
+                    "value": "/",
+                    "infoName": "雨水篦子联通管长度（米）",
+                    "label": "请输入雨水篦子联通管长度（米）"
+                },
+                {
+                    "infoName": "检测方式",
+                    "label": "请选择检测方式",
+                    "options": [
+                        "CCTV",
+                        "QV",
+                        "开井"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "缺陷等级",
+                    "label": "请输入缺陷等级",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "缺陷名称",
+                    "label": "请输入缺陷名称",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "整改完成时间",
+                    "label": "请输入整改完成时间",
+                    "type": "time",
+                    "value": ""
+                },
+                {
+                    "infoName": "整改完成时间",
+                    "label": "请输入整改完成时间",
+                    "type": "time",
+                    "value": ""
+                },
+                {
+                    "infoName": "整改前照片",
+                    "label": "请上传整改前照片",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "infoName": "整改后照片",
+                    "label": "请上传整整改后照片",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "infoName": "清疏组别",
+                    "type": "input",
+                    "value": "广州市运通水务有限公司",
+                    "label": "广州市运通水务有限公司"
+                },
+                {
+                    "infoName": "备注",
+                    "label": "请输入备注",
+                    "type": "upload",
+                    "value": []
+                }
+            ]
+        },
+        "特殊情况": {
+            "message": [
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "项目名称", "label": "请输入项目名称", "type": "input", "value": "" },
+                { "infoName": "施工路段", "label": "请输入施工路段", "type": "input", "value": "" },
+                { "infoName": "起始井号", "label": "请输入起始井号", "type": "input", "value": "" },
+                { "infoName": "终点井号", "label": "请输入终点井号", "type": "input", "value": "" },
+                { "infoName": "特殊情况", "label": "请上传特殊情况照片", "type": "upload", "value": [] },
+                { "infoName": "备注", "label": "请输入备注", "type": "input", "value": "" }
+            ]
+        },
+        "清疏台账": {
+            "message": [
+                {
+                    "infoName": "分区代码",
+                    "label": "请输入分区",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "所属污水处理系统",
+                    "value": "前锋污水处理系统",
+                    "type": "input"
+                },
+                {
+                    "infoName": "镇街",
+                    "value": "大龙",
+                    "type": "input",
+                    "label": "大龙"
+                },
+                {
+                    "infoName": "村居",
+                    "value": "/",
+                    "type": "input",
+                    "label": "/"
+                },
+                {
+                    "infoName": "道路名称",
+                    "label": "请输入道路名称",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "路段地址",
+                    "label": "请输入路段地址",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "涉及河涌",
+                    "label": "请输入河涌",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "涉及内涝点",
+                    "value": "/",
+                    "type": "input",
+                    "label": "/"
+                },
+                {
+                    "value": "",
+                    "infoName": "任务来源",
+                    "label": "请选择任务来源",
+                    "tpye": "select",
+                    "options": [
+                        "日常清疏",
+                        "一雨三清",
+                        "70公里渠箱清疏"
+                    ]
+                },
+                {
+                    "options": [
+                        "W",
+                        "H",
+                        "Y"
+                    ],
+                    "type": "select",
+                    "value": "",
+                    "infoName": "管道性质",
+                    "label": "请选择管道性质"
+                },
+                {
+                    "infoName": "清疏对象",
+                    "label": "请选择清疏对象",
+                    "options": [
+                        "管道",
+                        "明渠",
+                        "篦子"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "管道类别",
+                    "type": "input",
+                    "value": "常规管道",
+                    "label": "常规管道"
+                },
+                {
+                    "infoName": "管道材质砼/HDPE/钢管/PE",
+                    "label": "请选择管道材质",
+                    "options": [
+                        "砼",
+                        "HDPE",
+                        "钢管",
+                        "PE"
+                    ],
+                    "tpye": "select",
+                    "value": ""
+                },
+                {
+                    "label": "请输入起始井号",
+                    "type": "input",
+                    "value": "",
+                    "infoName": "起始井号"
+                },
+                {
+                    "value": "",
+                    "infoName": "终点井号",
+                    "label": "请输入终点井号",
+                    "tpye": "input"
+                },
+                {
+                    "infoName": "井数/篦子数（个）",
+                    "label": "请选择井数/篦子数（个）",
+                    "options": [
+                        "1",
+                        "/"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "管径/尺寸",
+                    "label": "请输入管径/尺寸",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "管道长度（米）",
+                    "label": "请输入管道长度",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "infoName": "明渠长度（米）",
+                    "label": "请输入明渠长度（米）",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "type": "input",
+                    "value": "/",
+                    "infoName": "雨水篦子联通管长度（米）",
+                    "label": "请输入雨水篦子联通管长度（米）"
+                },
+                {
+                    "infoName": "检测方式",
+                    "label": "请选择检测方式",
+                    "options": [
+                        "CCTV",
+                        "QV",
+                        "开井"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "远景（参照物）",
+                    "label": "请上传远景照片",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "value": [],
+                    "infoName": "清疏前井室图",
+                    "label": "请上传清疏前井室图",
+                    "tpye": "upload"
+                },
+                {
+                    "infoName": "清疏后井室图",
+                    "label": "请上传清疏后井室图",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "value": [],
+                    "infoName": "检测图片（清疏后，顺流）",
+                    "label": "请上传检测图片",
+                    "type": "upload"
+                },
+                {
+                    "type": "input",
+                    "value": [],
+                    "infoName": "发现问题",
+                    "label": "请输入发现的问题"
+                },
+                {
+                    "infoName": "清疏组别",
+                    "type": "input",
+                    "value": "广州市运通水务有限公司",
+                    "label": "广州市运通水务有限公司"
+                },
+                {
+                    "infoName": "备注",
+                    "label": "请输入备注",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "infoName": "缺陷照片",
+                    "label": "请上传缺陷照片",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "infoName": "水流方向",
+                    "label": "请选择水流方向",
+                    "options": [
+                        "S（顺流）",
+                        "N（逆流）"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "type": "checkbox",
+                    "value": [],
+                    "infoName": "清理状态",
+                    "label": "请勾选是否已清理",
+                    "options": [
+                        {
+                            "checked": false,
+                            "name": "起始井"
+                        },
+                        {
+                            "checked": false,
+                            "name": "管道"
+                        },
+                        {
+                            "checked": false,
+                            "name": "终点井"
+                        }
+                    ]
+                },
+                {
+                    "options": [
+                        "纳入观察",
+                        "转单修复"
+                    ],
+                    "type": "select",
+                    "value": "",
+                    "infoNmae": "修复计划时间",
+                    "label": "请选择修复计划时间"
+                }
+            ]
+        }
+    }
+}

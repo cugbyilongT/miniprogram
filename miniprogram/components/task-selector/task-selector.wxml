@@ -1,0 +1,12 @@
+<view class="back-btn" bindtap="handleBackToProject">
+  <van-icon name="arrow-left" /> 返回项目列表
+</view>
+<view class="task-list" style="position: relative; left: 0rpx; top: 69rpx">
+  <van-cell inset size="large" 
+  wx:for="{{tasks}}" 
+  wx:key="index" 
+  title="{{ item.name }}" 
+  label="{{ item.description }}" 
+  bind:click="selectTask" 
+  data-task="{{ item }}" />
+</view>

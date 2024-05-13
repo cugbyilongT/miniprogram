@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/mypage/index",
+    "pages/index/index",
+    "pages/fieldWorker/home/fieldWorker_home",
+    "pages/officeWorker/home/officeWorker_home",
+    "pages/projectManager/home/projectManager_home",
+    "pages/collectInfo/collectInfo",
+    "pages/QueryExport/QueryExport",
+    "pages/analysis/analysis",
+    "pages/personalInfo/personalInfo",
+    "pages/ledger/ledger",
+    "pages/analysis/analysis_chart"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F6F6F6",
+    "navigationBarTitleText": "YoungTubeWater",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "usePurComponent": true,
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/fieldWorker/home/fieldWorker_home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/QueryExport/QueryExport",
+        "text": "查询"
+      },
+      {
+        "pagePath": "pages/analysis/analysis",
+        "text": "数据"
+      },
+      {
+        "pagePath": "pages/personalInfo/personalInfo",
+        "text": "我的"
+      }
+    ],
+    "position": "bottom"
+  }
+
+
+}
