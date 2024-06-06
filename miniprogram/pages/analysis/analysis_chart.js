@@ -889,15 +889,15 @@ convertChineseNumToArabic(chineseNum) {
           // 遍历 gdpData 数组
           gdpData.forEach(item => {
             // 如果 item.worker_name 存在且不在 Set 中
-            if (item.worker_name && !workerNameSet.has(item.worker_name)) {
+            if (item.Workername && !workerNameSet.has(item.Workername)) {
               // 将其添加到 Set 中
-              workerNameSet.add(item.worker_name);
+              workerNameSet.add(item.Workername);
               // 初始化对应的 gdp 之和为 0
-              workerGdpSum[item.worker_name] = 0;
+              workerGdpSum[item.Workername] = 0;
             }
             // 累加 gdp 值
-            if (item.worker_name && item.gdp) {
-              workerGdpSum[item.worker_name] += item.gdp;
+            if (item.Workername && item.gdp) {
+              workerGdpSum[item.Workername] += item.gdp;
             }
           });
 
@@ -907,7 +907,7 @@ convertChineseNumToArabic(chineseNum) {
             .sort((a, b) => b.value - a.value); // 按 value 从大到小排序
 
           // 分别提取排序后的 worker_name 和 worker_value
-          const worker_name = sortedWorkerData.map(item => item.name);
+          const Workername = sortedWorkerData.map(item => item.name);
           const worker_value = sortedWorkerData.map(item => item.value);
 
           // 将 Set 转换为数组并赋值给 worker_name
@@ -916,18 +916,18 @@ convertChineseNumToArabic(chineseNum) {
           //         worker_value = Object.entries(workerGdpSum)
           // .map(([name, value]) => (value / 10000000).toFixed(3));
 
-          console.log("worker_name", worker_name)
-          console.log("worker_value", worker_value)
+          console.log("worker_name", Workername)
+          console.log("worker_value", Workername)
           this.setData({
             BarChartData: {
-              xData: worker_name,
+              xData: Workername,
               seriesData: worker_value
             }
           });
           let PieChartData = []
-          for (let i = 0; i < worker_name.length; i++) {
+          for (let i = 0; i < Workername.length; i++) {
             PieChartData.push({
-              name: worker_name[i],
+              name: Workername[i],
               value: worker_value[i]
             })
           }
@@ -943,7 +943,7 @@ convertChineseNumToArabic(chineseNum) {
           let dateSums = {};
 
           for (let i = 0; i < gdpData.length; i++) {
-            const date = new Date(gdpData[i].Date_final);
+            const date = new Date(gdpData[i].Date);
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
@@ -1001,7 +1001,7 @@ convertChineseNumToArabic(chineseNum) {
           let dateValuePairs = [];
           let dateSums = {};
           for (let i = 0; i < gdpData.length; i++) {
-            const date = new Date(gdpData[i].Date_final);
+            const date = new Date(gdpData[i].Date);
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');

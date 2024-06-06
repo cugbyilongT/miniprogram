@@ -1,0 +1,1 @@
+<van-button type="primary" block bind:click="selectTap">生成分析图表</van-button>

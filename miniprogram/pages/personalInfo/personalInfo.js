@@ -29,6 +29,113 @@ Page({
     onReachBottom: function() {
         // 页面上拉触底事件的处理函数
     },
+    
+// getRequestURLWithArrayParam(baseURL, paramName, paramValues) {
+//     let queryString = paramValues.map(value => `${encodeURIComponent(paramName)}=${encodeURIComponent(value)}`).join('&');
+//     return baseURL + '?' + queryString;
+// },
+
+
+
+    selectTap:function(e){
+
+        //         // 定义要传递的数据
+        // let selectedOptions = {
+        //     Project: ["大龙街2024年排水管网清、查项目"],
+        //     Section: [],
+        //     Task: [],
+        //     Work: ["清疏台账"],
+        //     Workername: ["杨怡"],
+        // };
+        // let dateRange = {
+        //     start: "2024-04-08",
+        //     end: "2024-05-10",
+        // };
+        // let analysisname = "全部数据";
+
+        // // 组合所有的数据为一个对象
+        // let postData = {
+        //     selectedOptions: selectedOptions,
+        //     dateRange: dateRange,
+        //     analysisname: analysisname
+        // };
+
+        // // 使用wx.request发送POST请求
+        // wx.request({
+        //     url: 'https://cloudbase-baas-7gioffo8b0741b20.service.tcloudbase.com/analysis', // 服务器接口地址
+        //     method: 'POST',
+        //     data: postData, // 发送的数据
+        //     header: {
+        //         'content-type': 'application/json' // 设置请求的 header，使用 JSON 数据格式
+        //     },
+        //     success: function(res) {
+        //         console.log('Success:', res.data); // 成功回调
+        //     },
+        //     fail: function(error) {
+        //         console.error('Error:', error); // 失败回调
+        //     }
+        // });
+
+        // // 使用fetch API发送POST请求
+        // fetch('https://cloudbase-baas-7gioffo8b0741b20.service.tcloudbase.com/analysis', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json', // 告诉服务器我们发送的是JSON数据
+        //     },
+        //     body: JSON.stringify(postData) // 将JavaScript对象转换为JSON字符串
+        // })
+        // .then(response => response.json()) // 解析JSON响应
+        // .then(data => console.log('Success:', data)) // 在控制台打印成功信息
+        // .catch(error => console.error('Error:', error)); // 打印错误信息
+
+        // const baseURL = 'https://cloudbase-baas-7gioffo8b0741b20.service.tcloudbase.com/analysis';
+        // const paramName = 'analysisname';
+        // const paramValues = ['全部数据'];
+
+        // const url = this.getRequestURLWithArrayParam(baseURL, paramName, paramValues);
+        // console.log(url);
+        let selectedOptions = {
+            Project: ["大龙街2024年排水管网清、查项目"],
+            Section: [],
+            Task: [],
+            Work: ["清疏台账"],
+            Workername: ["杨怡"],
+          }
+          let dateRange  = {
+            start: "",
+            end: "",
+          }
+          let analysisname = "全部数据",
+          Daily_workload_plan= 300,
+          Daily_production_value_plan= 20,
+          day_outvalue_comp=50
+        wx.cloud.callFunction({
+            name: 'Webhomepagedata',
+            data: {
+                selectedOptions: selectedOptions,
+                dateRange: dateRange,
+                analysisname: analysisname,
+                Daily_workload_plan: Daily_workload_plan,
+                Daily_production_value_plan: Daily_production_value_plan,
+                day_outvalue_comp: day_outvalue_comp
+              },
+    }).then(res => {
+        console.log('云函数查询结果:',res.result)
+    })
+        // let town = "大龙"
+    //     wx.cloud.callFunction({
+    //         name: 'webgetproject',
+    //         // data: {
+    //         //     town: town,
+    //         //   },
+    // }).then(res => {
+    //     console.log('云函数查询结果:',res.result)
+    // })
+
+
+
+    },
+
 
     onShareAppMessage: function() {
         // 用户点击右上角分享

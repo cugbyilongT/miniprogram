@@ -446,10 +446,10 @@ toggleDropdown: function (e) {
             fileName: modalRes.content // 设置文件名
           });
           // 显示正在导出的提示
-          wx.showToast({
+          wx.showLoading({
             title: '正在导出...',
             icon: 'loading',
-            duration: 10000 // 显示时长
+            duration: 50000 // 显示时长
           });
 
           // 获取用户选择的导出模板
@@ -469,9 +469,14 @@ toggleDropdown: function (e) {
               exportchoosed: that.data.exportoption.find(item => item.infoName === "管段方向").value
             },
             success: res => {
+              wx.hideLoading(); // 关闭正在导出的提示
               console.log(res);
               const fileID = res.result;
               console.log(fileID);
+              wx.showLoading({
+                title: '文档下载中...',
+                mask: true
+              });
               // 调用云存储 API 获取临时下载链接
               wx.cloud.getTempFileURL({
                 fileList: [fileID],
@@ -479,6 +484,7 @@ toggleDropdown: function (e) {
                   console.log("res", res);
                   // 获取下载链接
                   let downloadUrl = res.fileList[0].tempFileURL;
+
                   // 下载文件
                   wx.downloadFile({
                     url: downloadUrl,
@@ -491,11 +497,20 @@ toggleDropdown: function (e) {
                           tempFilePath: res.tempFilePath,
                           filePath: filePath,
                           success: function (saveRes) {
+                            wx.showLoading({
+                              title: '文档打开中...',
+                              mask: true
+                            });
                             console.log('文件保存成功: ', saveRes.savedFilePath);
                             // 使用保存的文件路径打开文档
                             wx.openDocument({
                               filePath: saveRes.savedFilePath,
                               success: function (res) {
+                                wx.showToast({
+                                  title: '文档打开成功',
+                                  icon: 'success',
+                                  duration: 2000
+                                });
                                 console.log('打开文档成功');
                               },
                               fail: function (error) {

@@ -51,6 +51,7 @@ function ranking(transformedData) {
 }
 
 function transformDataForECharts(totalByDate, baselineValue) {
+  console.log("transformDataForECharts", totalByDate)
   // 使用 reduce 方法来聚合数据
   const aggregatedData = totalByDate.reduce((acc, curr) => {
     if (acc[curr.workerName]) {
@@ -86,11 +87,52 @@ function transformDataForECharts(totalByDate, baselineValue) {
   // });
 
 }
+function analyzeWorkerDates(queryResults) {
+  let workerDates = {};
+
+  queryResults.forEach(entry => {
+    let workerName = entry.Workername;
+    let date = new Date(entry.Date); // 创建一次 Date 对象
+    if (!workerDates[workerName]) {
+      workerDates[workerName] = {
+        firstDay: date,
+        lastDay: date
+      };
+    } else {
+      if (date < workerDates[workerName].firstDay) {
+        workerDates[workerName].firstDay = date;
+      } else if (date > workerDates[workerName].lastDay) {
+        workerDates[workerName].lastDay = date;
+      }
+    }
+  });
+
+  // 延迟日期格式化到最终输出
+  let formattedResults = Object.entries(workerDates).map(([worker, dates]) => ({
+    workerName: worker,
+    firstDay: dates.firstDay.toISOString().slice(0, 10),
+    lastDay: dates.lastDay.toISOString().slice(0, 10)
+  }));
+
+  return formattedResults;
+}
+
+function reorderWorkerDates(workerDates, teamProgressBar) {
+  let {workerNames}  = teamProgressBar;
+  // 创建一个新数组，按 workerNames 的顺序包含所有存在的 workerDates 项
+  let orderedWorkerDates = workerNames.map(name => 
+      workerDates.find(worker => worker.workerName === name)
+  ).filter(item => item !== undefined); // 过滤掉未找到的项，即 undefined
+
+  return orderedWorkerDates;
+}
+
 
 //班组进度分析
 function Team_progress_analysis(queryResults, baselineValue) {
   console.log("queryResults", queryResults)
-  // return new Promise((resolve, reject) => {
+  let workerDates = analyzeWorkerDates(queryResults);
+  console.log("workerDates", workerDates)
   const targetNames = ['管道长度（米）', '明渠长度（米）', '雨水篦子联通管长度（米）'];
   let dailyTotals = {};
   if (queryResults && Array.isArray(queryResults)) {
@@ -123,15 +165,16 @@ function Team_progress_analysis(queryResults, baselineValue) {
     });
     // 设置结果到data
     let all_Team_progress_analysis = resultsArray;
-    // this.setData({
-    //   totalByDate: resultsArray
-    // });
-    // console.log('User_array:', this.data.User_array);
     console.log('工人日期统计的总长度:', all_Team_progress_analysis);
     let Team_progress_pie = getalldata(all_Team_progress_analysis);
     let Team_progress_bar = transformDataForECharts(all_Team_progress_analysis, baselineValue);
-    let Team_ranking = ranking(Team_progress_pie);
+    console.log('Team_progress_bar:', Team_progress_bar);
+    let Team_ranking = ranking(Team_progress_pie);  
+    let reorderedWorkerDates = reorderWorkerDates(workerDates, Team_progress_bar); 
+
+
     let Team_progress_analysis_data = {
+      reorderedWorkerDates: reorderedWorkerDates,
       Team_progress_pie: Team_progress_pie,
       Team_progress_bar: Team_progress_bar,
       Team_ranking: Team_ranking
@@ -139,14 +182,14 @@ function Team_progress_analysis(queryResults, baselineValue) {
     return Team_progress_analysis_data;
   } else {
     console.log("queryResults 不是数组或为空");
-    // reject("queryResults 不是数组或为空");
   }
-
-  // });
 }
 
 //班组产值分析
 function Team_value_analysis(gdpData, baselineValue) {
+  console.log("gdpData", gdpData)
+  let workerDates = analyzeWorkerDates(gdpData);
+  console.log("workergdpDataDates", workerDates)
   // 创建一个 Set 对象用于存储去重后的 worker_name
   const workerNameSet = new Set();
   console.log("workerNameSet", workerNameSet)
@@ -154,7 +197,7 @@ function Team_value_analysis(gdpData, baselineValue) {
   const workerGdpSum = {};
   // 遍历 gdpData 数组
   gdpData.forEach(item => {
-    // 如果 item.worker_name 存在且不在 Set 中
+    // 如果 item.Workername 存在且不在 Set 中
     if (item.Workername && !workerNameSet.has(item.Workername)) {
       // 将其添加到 Set 中
       workerNameSet.add(item.Workername);
@@ -182,11 +225,11 @@ function Team_value_analysis(gdpData, baselineValue) {
   //         worker_value = Object.entries(workerGdpSum)
   // .map(([name, value]) => (value / 10000000).toFixed(3));
 
-  console.log("worker_name", Workername)
-  console.log("worker_value", Workername)
+  console.log("Workername", Workername)
+  console.log("worker_value", worker_value)
 
   let Team_value_analysis_BarChartData = {
-    xData: Workername,
+    workerNames: Workername,
     seriesData: worker_value
   }
   // 计算百分比并添加到 Team_value_analysis_BarChartData
@@ -204,7 +247,10 @@ function Team_value_analysis(gdpData, baselineValue) {
   Team_value_analysis_PieChartData.sort((a, b) => b.value - a.value);
   // Team_value_analysis_PieChartData = Team_value_analysis_PieChartData
   let Team_value_analysis_ranking = ranking(Team_value_analysis_PieChartData)
+  console.log("Team_value_analysis_BarChartData",Team_value_analysis_BarChartData)
+  let reorderedWorkervalueDates = reorderWorkerDates(workerDates, Team_value_analysis_BarChartData); 
   let Team_value_analysis_data = {
+    reorderedWorkervalueDates: reorderedWorkervalueDates,
     Team_value_analysis_BarChartData: Team_value_analysis_BarChartData,
     Team_value_analysis_PieChartData: Team_value_analysis_PieChartData,
     Team_value_analysis_ranking: Team_value_analysis_ranking
@@ -369,6 +415,7 @@ function updateDefectCounts(rawData, key) {
     totalByLevel['小计'] += Number_of_Defects;
   });
 
+
   // 更新每个缺陷的数据
   defects = defects.map(defect => {
     const defectData = map[defect.name] || { '1级': 0, '2级': 0, '3级': 0, '4级': 0, '小计': 0 }; // 如果 map 中没有对应的缺陷名，使用默认值
@@ -456,7 +503,7 @@ function calculateDefect(queryResults) {
   let functionalResult = transformData(defectCounts.functional);
   let getstructural_defects_Table_data = updateDefectCounts(defectCounts.structural, structural_defects_Table_data);
   let getfunctional_defects_Table_data = updateDefectCounts(defectCounts.functional, functional_defects_Table_data);
-  let totalDefectsSummary = calculatedefectsTotal(defectCounts.structural, defectCounts.functional);
+  let totalDefectsSummary = calculatedefectsTotal(getstructural_defects_Table_data, getfunctional_defects_Table_data);
 
   console.log("structuralResult", structuralResult)
   console.log("functionalResult", functionalResult)
@@ -465,6 +512,8 @@ function calculateDefect(queryResults) {
   console.log("structural_defects_Table_data", structural_defects_Table_data)
   console.log("functional_defects_Table_data", functional_defects_Table_data)
 
+  console.log("getstructural_defects_Table_data", getstructural_defects_Table_data)
+  console.log("getfunctional_defects_Table_data", getfunctional_defects_Table_data)
   let defects_data = {
     getstructural_defects_Table_data: getstructural_defects_Table_data,
     getfunctional_defects_Table_data: getfunctional_defects_Table_data,
@@ -480,37 +529,42 @@ function calculateDefect(queryResults) {
 }
 
 function calculatedefectsTotal(structural, functional) {
+  console.log("calculatedefectsTotalstructural", structural)
+  console.log("calculatedefectsTotalfunctional", functional)
   let totals = {
     name: "总计",
     '1级': 0,
     '2级': 0,
     '3级': 0,
     '4级': 0,
-    小计: 0
+    '小计': 0
   };
+console.log("calculatedefectsTotaltotals", totals)
+// 遍历结构性缺陷数据
+structural.key.forEach(item => {
+  console.log("Processing item in structural:", item); // 检查正在处理的项
+  if (item.name === "小计") {
+    totals['1级'] += item['1级'];
+    totals['2级'] += item['2级'];
+    totals['3级'] += item['3级'];
+    totals['4级'] += item['4级'];
+    totals['小计'] += item['小计'];
+  }
+});
 
-  // 遍历结构性缺陷数据
-  structural.forEach(item => {
-    if (item.name === "小计") {
-      totals['1级'] += item['1级'] || 0;
-      totals['2级'] += item['2级'] || 0;
-      totals['3级'] += item['3级'] || 0;
-      totals['4级'] += item['4级'] || 0;
-      totals['小计'] += item['小计'] || 0;
-    }
-  });
-
-  // 遍历功能性缺陷数据
-  functional.forEach(item => {
-    if (item.name === "小计") {
-      totals['1级'] += item['1级'] || 0;
-      totals['2级'] += item['2级'] || 0;
-      totals['3级'] += item['3级'] || 0;
-      totals['4级'] += item['4级'] || 0;
-      totals['小计'] += item['小计'] || 0;
-    }
-  });
-
+  console.log("calculatedefectsTotaltotals", totals)
+// 遍历功能性缺陷数据
+functional.key.forEach(item => {
+  console.log("Processing item in functional:", item); // 检查正在处理的项
+  if (item.name === "小计") {
+    totals['1级'] += item['1级'];
+    totals['2级'] += item['2级'];
+    totals['3级'] += item['3级'];
+    totals['4级'] += item['4级'];
+    totals['小计'] += item['小计'];
+  }
+});
+console.log("calculatedefectsTotaltotals", totals)
 
   let totalDefectsSummary = [totals]
   // 打印最终的总计数据
@@ -723,14 +777,14 @@ function calculateTotalDays(startData, endData) {
   // 确保日期格式正确，这里假设 startData 和 endData 是 'YYYY-MM-DD' 格式的字符串
   console.log("startData", startData)
   console.log("endData", endData)
-  const startDate = new Date(startData);
-  const endDate = new Date(endData);
+  let startDate = new Date(startData);
+  let endDate = new Date(endData);
 
   // 计算两个日期之间的差值（以毫秒为单位）
-  const differenceInMilliseconds = endDate - startDate;
+  let differenceInMilliseconds = endDate - startDate;
 
   // 将毫秒转换为天数
-  const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  let differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
 
   // 返回总天数（包含起始和结束日期）
   return differenceInDays + 1;
@@ -740,41 +794,42 @@ function calculateTotalDays(startData, endData) {
 exports.main = async (event, context) => {
 
   // 设置 CORS 头部
-  const headers = {
-    'Access-Control-Allow-Origin': '*', // 允许所有域名访问，或者指定域名如 https://example.com
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // 允许的方法
-    'Access-Control-Allow-Headers': 'Content-Type', // 允许的请求头
-    'Access-Control-Max-Age': '86400' // 预检请求的缓存时间(秒)
-  };
+  // const headers = {
+  //   'Access-Control-Allow-Origin': 'null', // 允许所有域名访问，或者指定域名如 https://example.com
+  //   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // 允许的方法
+  //   'Access-Control-Allow-Headers': 'Content-Type', // 允许的请求头
+  //   'Access-Control-Max-Age': '86400' // 预检请求的缓存时间(秒)
+  // };
 
-  if (!event.body) {
-    return {
-      event,
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ error: 'No data provided' })
-    };
-  }
-  console.log(event.body)
+  // if (!event.body) {
+  //   return {
+  //     event,
+  //     statusCode: 400,
+  //     headers,
+  //     body: JSON.stringify({ error: 'No data provided' })
+  //   };
+  // }
+  // console.log(event.body)
   try {
     // 如果是OPTIONS请求，返回204状态码（无内容响应）
-    if (event.httpMethod === 'OPTIONS') {
-      return {
-        statusCode: 204,
-        headers,
-        body: ''
-      };
-    }
-    if (event.httpMethod === 'POST') {
-      const body = JSON.parse(event.body);
+    // if (event.httpMethod === 'OPTIONS') {
+    //   return {
+    //     statusCode: 204,
+    //     headers,
+    //     body: ''
+    //   };
+    // }
+    // if (event.httpMethod === 'POST') {
+      // const body = JSON.parse(event.body);
+      const body = event
       analysisname = body.analysisname
-      selectedOptions = body.selectedOptions;
+      let selectedOptions = body.selectedOptions;
       dateRange = body.dateRange;
       let allselectdata = {
         selectedOptions: selectedOptions,
         dateRange: dateRange
       }
-      let date = calculateTotalDays(dateRange.start, dateRange.end)
+      // let date = calculateTotalDays(dateRange.start, dateRange.end)
       // 假设 body 对象包含从某个请求体或者其他来源获取的数据
       let Daily_workload_plan = Number(body.Daily_workload_plan);
       let Daily_production_value_plan = Number(body.Daily_production_value_plan);
@@ -799,7 +854,7 @@ exports.main = async (event, context) => {
       let results = {}
 
       if (analysisname === "全部数据" || analysisname === "班组进度分析") {
-        let baselineValue = Daily_workload_plan * date
+        // let baselineValue = Daily_workload_plan * date
         let queryResults = await getcloudworksdata(selectdata)
         let Team_progress_analysis_data = Team_progress_analysis(queryResults, baselineValue)
         console.log("Team_progress_analysis_data", Team_progress_analysis_data)
@@ -845,6 +900,7 @@ exports.main = async (event, context) => {
         // return { Team_history_progress_data }
       }
       if (analysisname === "全部数据" || analysisname === "班组历史产值分析") {
+        console.log("allselectdata", allselectdata)
         let gdpresult = await getcloudgetGdpByDatedata(allselectdata)
         let Team_history_value_analysis_data = Team_history_value_analysis(gdpresult,Daily_production_value_plan,Weekly_production_value_plan,Monthly_production_value_plan)
         console.log("Team_history_value_analysis_data", Team_history_value_analysis_data)
@@ -855,13 +911,15 @@ exports.main = async (event, context) => {
         // return { Team_history_value_analysis_data }
       }
       console.log("results", results)
+      return results
       return {
         statusCode: 200,
         headers: headers,
         body: JSON.stringify(results)
       };
-    }
+    // }
   } catch (err) {
+    return 0
     return {
       statusCode: 500,
       headers: headers,

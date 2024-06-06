@@ -47,10 +47,10 @@
     <view class="main">
         <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ initPieChart }}" force-use-old-canvas="true"></ec-canvas>
     </view>
-    <view class="main">
+    <view wx:if="{{analysisName !== '公司产值分析'}}" class="main">
         <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ initPieChart }}" force-use-old-canvas="true"></ec-canvas>
     </view>
-    <view>
+    <view wx:if="{{analysisName !== '公司产值分析'}}">
         <view class="title">排名：</view>
         <block wx:for="{{displayData}}" wx:key="index">
             <view class="rank-item {{isLimited ? (index < 3 ? 'red' : 'black') : 'normal'}}">

@@ -16,9 +16,14 @@ exports.main = async (event, context) => {
     // 构建查询条件
     let query = db.collection('works');
 
+    // 获取当前日期并格式化为 ISO 字符串
+    const today = new Date().toISOString();
     // 添加日期范围的查询条件
     const startDate = dateRange.start ? new Date(`${dateRange.start}T00:00:00.000Z`) : null;
     const endDate = dateRange.end ? new Date(`${dateRange.end}T23:59:59.999Z`) : null;
+
+    // 默认起始时间设定为一个较早的时间点，例如 1970 年 1 月 1 日
+    const defaultStartDate = new Date('1970-01-01T00:00:00.000Z');
 
     const condition = {};
 
@@ -31,6 +36,13 @@ exports.main = async (event, context) => {
     } else if (endDate) {
       condition.Date = _.lt(endDate.toISOString());
       console.log('日期范围查询条件:', { endDate: endDate.toISOString() });
+    }else{
+            // 没有时间选择时，设定默认时间范围
+      condition.Date = _.and([
+        _.gte(defaultStartDate.toISOString()),
+        _.lt(today)
+      ]);
+      console.log('默认日期范围查询条件:', { startDate: defaultStartDate.toISOString(), endDate: today });
     }
 
     // 添加下拉菜单选项的查询条件
@@ -41,15 +53,21 @@ exports.main = async (event, context) => {
       }
     });
     console.log('查询条件:', condition);
-
+    console.log('最终查询条件:', JSON.stringify(condition, null, 2));
     if (Object.keys(condition).length > 0) {
       query = query.where(condition);
       console.log('最终查询条件:', query);
+      console.log('最终查询条件:', JSON.stringify(condition, null, 2));
     }
+    
+
     // 查询数据
     const res = await query.get();
-    const works = res.data;
-    console.log("cloud3", res)
+    console.log("cloud1", res)
+     // 过滤掉包含 deleted: true 的条目
+    const filteredData = res.data.filter(entry => !entry.deleted);
+    const works = filteredData;
+    console.log("cloud2", works)
 
     // 处理清疏台账数据计算产值
     let gdp_item = [];
@@ -201,9 +219,9 @@ exports.main = async (event, context) => {
           pipe_value_final,
           pipe_wash_count_final
         });
-        let Date_final = works[i].Date;
-        let worker_name = works[i].Workername
-        gdp_item.push({ Date_final, gdp ,worker_name});
+        let Date = works[i].Date;
+        let Workername = works[i].Workername
+        gdp_item.push({ Date, gdp ,Workername});
       }
       console.log("cloud8", gdp_item);
     }

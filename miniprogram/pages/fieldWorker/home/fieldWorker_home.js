@@ -51,7 +51,8 @@ Page({
         const newProjects = res.result.data.filter(project => {
           const members = project.members;
           return Array.isArray(members) && members.findIndex(member => member === this.data.userAccount) !== -1;
-        });      console.log('获取项目列表成功', newProjects);
+        });      
+      console.log('获取项目列表成功', newProjects);
       this.setData({
         projects: newProjects,
         filteredProjects: newProjects,
