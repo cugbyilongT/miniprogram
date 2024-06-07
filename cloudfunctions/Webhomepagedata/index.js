@@ -1,4 +1,5 @@
 // 云函数入口文件
+const { all } = require('axios');
 const cloud = require('wx-server-sdk')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
@@ -21,15 +22,7 @@ function getalldata(totalByDate) {
   }));
   // 对 transformedData 根据 value 降序排序
   transformedData.sort((a, b) => b.value - a.value);
-
-
-  // console.log('getalldata工人:', PieChartData);
-  console.log('getalldata工人:', transformedData);
   return transformedData;
-  // this.setData({
-  //   PieChartData: transformedData,
-  // });
-
 }
 
 function ranking(transformedData) {
@@ -46,11 +39,10 @@ function ranking(transformedData) {
   } else {
     displayData = rankedData;
   }
-  console.log('rankingDisplayData:', displayData);
   return displayData;
 }
 
-function transformDataForECharts(totalByDate, baselineValue) {
+function transformDataForECharts(totalByDate) {
   // 使用 reduce 方法来聚合数据
   const aggregatedData = totalByDate.reduce((acc, curr) => {
     if (acc[curr.workerName]) {
@@ -64,16 +56,15 @@ function transformDataForECharts(totalByDate, baselineValue) {
   // 将聚合后的对象转换成数组格式
   const transformedData = Object.values(aggregatedData);
   transformedData.sort((a, b) => b.totalLength - a.totalLength);
-  console.log("transformedData", transformedData)
   // 提取 workerName 到一个新的数组
   const workerNames = transformedData.map(item => item.workerName);
   // 提取 totalLength 到另一个新的数组
   const totalLengths = transformedData.map(item => item.totalLength);
 
   // 计算每个 totalLength 的百分比
-  const percentages = totalLengths.map(value => ((value / baselineValue) * 100).toFixed(1) );
+  // const percentages = totalLengths.map(value => ((value / baselineValue) * 100).toFixed(1) );
 
-  let newData = { workerNames, totalLengths, percentages }
+  let newData = { workerNames, totalLengths }
 
 
   return newData;
@@ -87,8 +78,6 @@ function transformDataForECharts(totalByDate, baselineValue) {
 
 }
 function reorderWorkerDates(workerDates, teamProgressBar) {
-  console.log("workerDates", workerDates)
-  console.log("teamProgressBar", teamProgressBar)
   let {workerNames}  = teamProgressBar;
   // 创建一个新数组，按 workerNames 的顺序包含所有存在的 workerDates 项
   let orderedWorkerDates = workerNames.map(name => 
@@ -129,8 +118,9 @@ function analyzeWorkerDates(queryResults) {
 }
 
 //班组进度分析
-function Team_progress_analysis(queryResults, baselineValue) {
-  console.log("queryResults", queryResults)
+function Team_progress_analysis(queryResults,allvalue) {
+  if (!queryResults || (Array.isArray(queryResults) && queryResults.length === 0) || (queryResults.constructor === Object && Object.keys(queryResults).length === 0)) {
+    return "暂无数据";}
   let workerDates = analyzeWorkerDates(queryResults);
   // return new Promise((resolve, reject) => {
   const targetNames = ['管道长度（米）', '明渠长度（米）', '雨水篦子联通管长度（米）'];
@@ -165,24 +155,29 @@ function Team_progress_analysis(queryResults, baselineValue) {
     });
     // 设置结果到data
     let all_Team_progress_analysis = resultsArray;
-    // this.setData({
-    //   totalByDate: resultsArray
-    // });
-    // console.log('User_array:', this.data.User_array);
-    console.log('工人日期统计的总长度:', all_Team_progress_analysis);
+
     let Team_progress_pie = getalldata(all_Team_progress_analysis);
-    let Team_progress_bar = transformDataForECharts(all_Team_progress_analysis, baselineValue);
+    let Team_progress_bar = transformDataForECharts(all_Team_progress_analysis);
     let Team_ranking = ranking(Team_progress_pie);
     let reorderedWorkerDates = reorderWorkerDates(workerDates, Team_progress_bar); 
-    console.log("reorderedWorkerDates", reorderedWorkerDates)
-    console.log("Team_progress_bar", Team_progress_bar)
-    let Team_progress_analysis_data = {
-      reorderedWorkerDates: reorderedWorkerDates,
-      Team_progress_pie: Team_progress_pie,
-      Team_progress_bar: Team_progress_bar,
-      Team_ranking: Team_ranking
+    if (allvalue == true) {
+      let totalValue = Team_progress_pie.reduce((sum, item) => sum + item.value, 0);
+      let Team_all_progress_analysis_data = {
+        reorderedWorkerDates: reorderedWorkerDates,
+        Team_progress_bar: Team_progress_bar,
+        Team_ranking: Team_ranking,
+        all_Team_progress: totalValue
+      }
+      return Team_all_progress_analysis_data;
+    }else{
+      let Team_all_progress_analysis_data = {
+        reorderedWorkerDates: reorderedWorkerDates,
+        Team_progress_bar: Team_progress_bar,
+        Team_ranking: Team_ranking
+      }
+      return Team_all_progress_analysis_data;
     }
-    return Team_progress_analysis_data;
+
   } else {
     console.log("queryResults 不是数组或为空");
     // reject("queryResults 不是数组或为空");
@@ -192,13 +187,12 @@ function Team_progress_analysis(queryResults, baselineValue) {
 }
 
 //班组产值分析
-function Team_value_analysis(gdpData, baselineValue) {
-  console.log("gdpData", gdpData)
+function Team_value_analysis(gdpData, allvalue) {
+  if (!gdpData || (Array.isArray(gdpData) && gdpData.length === 0) || (gdpData.constructor === Object && Object.keys(gdpData).length === 0)) {
+    return "暂无数据";}
   let workerDates = analyzeWorkerDates(gdpData);
-  console.log("workergdpDataDates", workerDates)
   // 创建一个 Set 对象用于存储去重后的 worker_name
   const workerNameSet = new Set();
-  console.log("workerNameSet", workerNameSet)
   // 创建一个对象用于存储每个 worker_name 对应的 gdp 之和
   const workerGdpSum = {};
   // 遍历 gdpData 数组
@@ -231,16 +225,13 @@ function Team_value_analysis(gdpData, baselineValue) {
   //         worker_value = Object.entries(workerGdpSum)
   // .map(([name, value]) => (value / 10000000).toFixed(3));
 
-  console.log("Workername", Workername)
-  console.log("worker_value", worker_value)
-
   let Team_value_analysis_BarChartData = {
     workerNames: Workername,
     seriesData: worker_value
   }
   // 计算百分比并添加到 Team_value_analysis_BarChartData
-  let percentageData = worker_value.map(value => ((value / baselineValue) * 100).toFixed(1));
-  Team_value_analysis_BarChartData.percentageData = percentageData;
+  // let percentageData = worker_value.map(value => ((value / baselineValue) * 100).toFixed(1));
+  // Team_value_analysis_BarChartData.percentageData = percentageData;
 
   let Team_value_analysis_PieChartData = []
   for (let i = 0; i < Workername.length; i++) {
@@ -253,23 +244,35 @@ function Team_value_analysis(gdpData, baselineValue) {
   Team_value_analysis_PieChartData.sort((a, b) => b.value - a.value);
   // Team_value_analysis_PieChartData = Team_value_analysis_PieChartData
   let Team_value_analysis_ranking = ranking(Team_value_analysis_PieChartData)
-  console.log("Team_value_analysis_BarChartData",Team_value_analysis_BarChartData)
   let reorderedWorkervalueDates = reorderWorkerDates(workerDates, Team_value_analysis_BarChartData); 
-  let Team_value_analysis_data = {
-    reorderedWorkervalueDates: reorderedWorkervalueDates,
-    Team_value_analysis_BarChartData: Team_value_analysis_BarChartData,
-    Team_value_analysis_PieChartData: Team_value_analysis_PieChartData,
-    Team_value_analysis_ranking: Team_value_analysis_ranking
+
+  if (allvalue == true){
+    let totalValue = Team_value_analysis_PieChartData.reduce((sum, item) => {
+      return sum + parseFloat(item.value);
+    }, 0);
+    let roundedTotalValue = Math.round(totalValue * 100) / 100;
+    let Team_value_analysis_data = {
+      reorderedWorkervalueDates: reorderedWorkervalueDates,
+      Team_value_analysis_BarChartData: Team_value_analysis_BarChartData,
+      Team_value_analysis_ranking: Team_value_analysis_ranking,
+      Team_all_value : roundedTotalValue
+    }
+    return Team_value_analysis_data;
+
+  }else{
+    let Team_value_analysis_data = {
+      reorderedWorkervalueDates: reorderedWorkervalueDates,
+      Team_value_analysis_BarChartData: Team_value_analysis_BarChartData,
+      Team_value_analysis_ranking: Team_value_analysis_ranking
+    }
+    return Team_value_analysis_data;
   }
-  return Team_value_analysis_data;
 
 }
 
 function calculateWeeklyAndMonthlyTotals(dates, values) {
   const weeklyTotals = {};
-  console.log("dates", dates)
   const monthlyTotals = {};
-  console.log("values", values)
   dates.forEach((date, index) => {
     const dateObj = new Date(date);
     const dayOfWeek = dateObj.getDay();
@@ -281,10 +284,13 @@ function calculateWeeklyAndMonthlyTotals(dates, values) {
     const month = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1).toString().padStart(2, '0')}`;
 
     // 按周和月聚合值，确保转换为数字
-    weeklyTotals[mondayLabel] = (weeklyTotals[mondayLabel] || 0) + parseFloat(values[index]);
-    monthlyTotals[month] = (monthlyTotals[month] || 0) + parseFloat(values[index]);
-    console.log("weeklyTotals", weeklyTotals)
-    console.log("monthlyTotals", monthlyTotals)
+    // 更新周总计，保留一位小数
+    weeklyTotals[mondayLabel] = Math.round(((weeklyTotals[mondayLabel] || 0) + parseFloat(values[index])) * 100) / 100;
+
+    // 更新月总计，保留一位小数
+    monthlyTotals[month] = Math.round(((monthlyTotals[month] || 0) + parseFloat(values[index])) * 100) / 100;
+    // weeklyTotals[mondayLabel] = (weeklyTotals[mondayLabel] || 0) + parseFloat(values[index]);
+    // monthlyTotals[month] = (monthlyTotals[month] || 0) + parseFloat(values[index]);
     // weeklyTotals[mondayLabel] = weeklyTotals[mondayLabel] || 0;
     // monthlyTotals[month] = monthlyTotals[month] || 0;
 
@@ -294,10 +300,8 @@ function calculateWeeklyAndMonthlyTotals(dates, values) {
 
   const weekLabels = Object.keys(weeklyTotals).sort((a, b) => b.localeCompare(a));
   const weekValues = weekLabels.map(label => weeklyTotals[label]);
-  console.log("weekValues", weekValues)
   const monthLabels = Object.keys(monthlyTotals).sort((a, b) => b.localeCompare(a));
   const monthValues = monthLabels.map(label => monthlyTotals[label]);
-  console.log("monthValues", monthValues)
   return {
     weekLabels,
     weekValues,
@@ -337,9 +341,10 @@ function Company_value_analysis(gdpData,day_outvalue_comp,weekly_outvalue_comp,m
   // 分别提取排序后的日期和值
   const worker_date = dateValuePairs.map(pair => pair.date);
   const worker_value = dateValuePairs.map(pair => pair.value);
-  console.log("worker_date", worker_date)
-  console.log("worker_value", worker_value)
-
+  
+  // 使用 reduce 方法计算总和
+  const totalValue = worker_value.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const roundedTotalValue = Math.round(totalValue * 100) / 100;
   const { weekLabels, weekValues, monthLabels, monthValues } = calculateWeeklyAndMonthlyTotals(worker_date, worker_value);
 
   // 计算百分比
@@ -356,11 +361,9 @@ function Company_value_analysis(gdpData,day_outvalue_comp,weekly_outvalue_comp,m
     weekPercentages: weekPercentages,
     monthLabels: monthLabels,
     monthValues: monthValues,
-    monthPercentages: monthPercentages
+    monthPercentages: monthPercentages,
+    comp_all_value: roundedTotalValue 
   };
-
-  console.log("dateValuePairs", dateValuePairs)
-
   return Company_value_analysis_day_week_month
 }
 
@@ -408,7 +411,6 @@ function updateDefectCounts(rawData, key) {
 
   let defects = key;
   let totalByLevel = { '1级': 0, '2级': 0, '3级': 0, '4级': 0, '小计': 0 };
-  console.log("defects", defects)
   let map = {};
   rawData.forEach(item => {
     const { Defect_Name, Defect_Level, Number_of_Defects } = item;
@@ -510,13 +512,6 @@ function calculateDefect(queryResults) {
   let getfunctional_defects_Table_data = updateDefectCounts(defectCounts.functional, functional_defects_Table_data);
   let totalDefectsSummary = calculatedefectsTotal(defectCounts.structural, defectCounts.functional);
 
-  console.log("structuralResult", structuralResult)
-  console.log("functionalResult", functionalResult)
-  console.log("defectCounts", defectCounts)
-
-  console.log("structural_defects_Table_data", structural_defects_Table_data)
-  console.log("functional_defects_Table_data", functional_defects_Table_data)
-
   let defects_data = {
     getstructural_defects_Table_data: getstructural_defects_Table_data,
     getfunctional_defects_Table_data: getfunctional_defects_Table_data,
@@ -565,8 +560,6 @@ function calculatedefectsTotal(structural, functional) {
 
 
   let totalDefectsSummary = [totals]
-  // 打印最终的总计数据
-  console.log("Total Defects Summary:", totalDefectsSummary);
   return totalDefectsSummary;
 }
 
@@ -669,10 +662,8 @@ function fillDatesAndLengths(workertalByDate,Daily_workload_plan,Weekly_workload
 //获取works云函数
 async function getcloudworksdata(event) {
   // 从event中获取查询参数
-  console.log("event", event)
   selectedOptions = event.selectedOptions;
   dateRange = event.dateRange;
-  console.log("dateRange", dateRange)
   let result = await cloud.callFunction({
     name: 'getworksdata',
     data: {
@@ -681,7 +672,6 @@ async function getcloudworksdata(event) {
     },
   });
   let queryResults = result.result;
-  console.log("result", queryResults)
   return queryResults;
 }
 
@@ -690,7 +680,6 @@ async function getcloudgetGdpByDatedata(event) {
   // 从event中获取查询参数
   selectedOptions = event.selectedOptions;
   dateRange = event.dateRange;
-  console.log("dateRange", dateRange)
   let result = await cloud.callFunction({
     name: 'getGdpByDate',
     data: {
@@ -699,7 +688,6 @@ async function getcloudgetGdpByDatedata(event) {
     },
   });
   let queryResults = result.result;
-  console.log("result", queryResults)
   return queryResults;
 }
 
@@ -747,11 +735,8 @@ function Team_history_value_analysis(gdpData,Daily_production_value_plan,Weekly_
   // 分别提取排序后的日期和值
   const worker_date = dateValuePairs.map(pair => pair.date);
   const worker_value = dateValuePairs.map(pair => pair.value);
-  console.log("worker_date", worker_date)
-  console.log("worker_value", worker_value)
 
   let { weekLabels, weekValues, monthLabels, monthValues } = calculateWeeklyAndMonthlyTotals(worker_date, worker_value);
-
 
   // 计算百分比
   const dayPercentages = worker_value.map(length => ((length / Daily_production_value_plan) * 100).toFixed(1));
@@ -774,8 +759,6 @@ function Team_history_value_analysis(gdpData,Daily_production_value_plan,Weekly_
 
 function calculateTotalDays(startData, endData) {
   // 确保日期格式正确，这里假设 startData 和 endData 是 'YYYY-MM-DD' 格式的字符串
-  console.log("startData", startData)
-  console.log("endData", endData)
   const startDate = new Date(startData);
   const endDate = new Date(endData);
 
@@ -791,82 +774,126 @@ function calculateTotalDays(startData, endData) {
 
 
 // 获取当前日期并格式化为 YYYY-MM-DD 格式
-function getFormattedDate() {
-  const date = new Date();
-  const year = date.getFullYear(); // 获取年份
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 获取月份，月份从0开始计数，所以需要+1
-  const day = date.getDate().toString().padStart(2, '0'); // 获取日期
+// function getFormattedDate() {
+//   const date = new Date();
+//   const year = date.getFullYear(); // 获取年份
+//   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 获取月份，月份从0开始计数，所以需要+1
+//   const day = date.getDate().toString().padStart(2, '0'); // 获取日期
 
-  return `${year}-${month}-${day}`; // 使用模板字符串返回格式化的日期
+//   return `${year}-${month}-${day}`; // 使用模板字符串返回格式化的日期
+// }
+
+function getdata(queryResults){
+  // 用于存储结果的数组
+let todaysData = [];
+let thisWeeksData = [];
+let thisMonthsData = [];
+
+// 获取当前日期和时间信息
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 今天的日期，忽略时间
+const startOfWeek = new Date(today);
+startOfWeek.setDate(today.getDate() - today.getDay() + 1); // 本周第一天（周一）
+const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // 本月第一天
+
+// 函数用于判断日期是否在同一周
+function isSameWeek(d1, d2) {
+    return d1 >= startOfWeek && d1 < new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000);
+}
+
+// 函数用于判断日期是否在同一月
+function isSameMonth(d1, d2) {
+    return d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+}
+
+// 遍历数据，分类存储
+queryResults.forEach(item => {
+    const itemDate = new Date(item.Date);
+
+    if (itemDate.toDateString() === today.toDateString()) {
+        todaysData.push(item);
+    }
+    if (isSameWeek(itemDate, today)) {
+        thisWeeksData.push(item);
+    }
+    if (isSameMonth(itemDate, today)) {
+        thisMonthsData.push(item);
+    }
+});
+return {
+    todaysData,
+    thisWeeksData,
+    thisMonthsData  
+}
+
 }
 
 
 // 云函数入口函数
 exports.main = async (event, context) => {
 
-  // // 设置 CORS 头部
-  // const headers = {
-  //   'Access-Control-Allow-Origin': '*', // 允许所有域名访问，或者指定域名如 https://example.com
-  //   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // 允许的方法
-  //   'Access-Control-Allow-Headers': 'Content-Type', // 允许的请求头
-  //   'Access-Control-Max-Age': '86400' // 预检请求的缓存时间(秒)
-  // };
+  // 设置 CORS 头部
+  const headers = {
+    'Access-Control-Allow-Origin': '*', // 允许所有域名访问，或者指定域名如 https://example.com
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // 允许的方法
+    'Access-Control-Allow-Headers': 'Content-Type', // 允许的请求头
+    'Access-Control-Max-Age': '86400' // 预检请求的缓存时间(秒)
+  };
 
-  // if (!event.body) {
-  //   return {
-  //     event,
-  //     statusCode: 400,
-  //     headers,
-  //     body: JSON.stringify({ error: 'No data provided' })
-  //   };
-  // }
-  // console.log(event.body)
+  if (!event.body) {
+    return {
+      event,
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({ error: 'No data provided' })
+    };
+  }
+  console.log(event.body)
   try {
     // 如果是OPTIONS请求，返回204状态码（无内容响应）
-    // if (event.httpMethod === 'OPTIONS') {
-    //   return {
-    //     statusCode: 204,
-    //     headers,
-    //     body: ''
-    //   };
-    // }
-    // if (event.httpMethod === 'POST') {
-    //   const body = JSON.parse(event.body);
-    //   analysisname = body.analysisname
-    //   selectedOptions = body.selectedOptions;
-    //   dateRange = body.dateRange;
-    //   let allselectdata = {
-    //     selectedOptions: selectedOptions,
-    //     dateRange: dateRange
-    //   }
-    const body = event
-    analysisname = body.analysisname
-    let selectedOptions = body.selectedOptions;
-    dateRange = body.dateRange;
-    let allselectdata = {
-      selectedOptions: selectedOptions,
-      dateRange: dateRange
+    if (event.httpMethod === 'OPTIONS') {
+      return {
+        statusCode: 204,
+        headers,
+        body: ''
+      };
     }
-    console.log("analysisname", analysisname)
-    console.log("selectedOptions", selectedOptions)
-    console.log("dateRange", dateRange)
-    let todaydate = getFormattedDate()
-    console.log("todaydate", todaydate)
+    if (event.httpMethod === 'POST') {
+      let body = JSON.parse(event.body);
+      analysisname = body.analysisname
+      selectedOptions = body.selectedOptions;
+      dateRange = body.dateRange;
+      let allselectdata = {
+        selectedOptions: selectedOptions,
+        dateRange: dateRange
+      }
+    // const body = event
+    // analysisname = body.analysisname
+    // let selectedOptions = body.selectedOptions;
+    // dateRange = body.dateRange;
+    // let allselectdata = {
+    //   selectedOptions: selectedOptions,
+    //   dateRange: dateRange
+    // }
+    // let todaydate = getFormattedDate()
+    // console.log("todaydate", todaydate)
     // let date = calculateTotalDays(dateRange.start, dateRange.end)
     // 假设 body 对象包含从某个请求体或者其他来源获取的数据
     let Monthly_workload_plan = Number(body.Monthly_workload_plan);
     let Monthly_production_value_plan = Number(body.Monthly_production_value_plan);
     let Monthly_outvalue_comp = Number(body.Monthly_outvalue_comp);
 
-    let Weekly_workload_plan = Monthly_workload_plan / 4,
-        Weekly_production_value_plan = Monthly_production_value_plan / 4,
-        weekly_outvalue_comp = Monthly_outvalue_comp / 4,
-        Daily_workload_plan = Monthly_workload_plan / 30,
-        Daily_production_value_plan = Monthly_production_value_plan / 30,
-        Daily_outvalue_comp = Monthly_outvalue_comp / 30,
+    let Weekly_workload_plan = Math.round((Monthly_workload_plan / 4) * 100) / 100,
+        Weekly_production_value_plan =  Math.round((Monthly_production_value_plan / 4) * 100) / 100,
+        weekly_outvalue_comp = Math.round((Monthly_outvalue_comp / 4) * 100) / 100,
+        Daily_workload_plan = Math.round((Monthly_workload_plan / 30) * 100) / 100,
+        Daily_production_value_plan = Math.round((Monthly_production_value_plan / 30) * 100) / 100,
+        Daily_outvalue_comp = Math.round((Monthly_outvalue_comp / 30) * 100) / 100,
       // 创建 selectedOptions 的深拷贝
       newSelectedOptions = JSON.parse(JSON.stringify(selectedOptions));
 
+    // let allvalue = true // 是否为全部数据
+    // let all_value = false // 是否为全部数据
     // 清空新数组中的 Workername 值
     // 清空 Workername 数组
     newSelectedOptions.Workername = [];
@@ -875,48 +902,66 @@ exports.main = async (event, context) => {
       dateRange: dateRange
     }
     let results = {}
-
     if (analysisname === "全部数据" || analysisname === "班组进度分析") {
+      let Team_progress ={}
       let queryResults = await getcloudworksdata(selectdata)
-      console.log("queryResults", queryResults)
-      
-      let Team_progress_analysis_data = Team_progress_analysis(queryResults, baselineValue)
-      console.log("Team_progress_analysis_data", Team_progress_analysis_data)
-      // 添加 baselineValue 到对象
-      // Team_progress_analysis_data.baselineValue = baselineValue;
-      results.Team_progress_analysis_data = Team_progress_analysis_data;
-      // return Team_progress_analysis_data
+      let { todaysData, thisWeeksData, thisMonthsData } = getdata(queryResults)
+      let Team_all_progress_analysis_data = Team_progress_analysis(queryResults, allvalue = true)
+      let Team_daily_progress_analysis_data = Team_progress_analysis(todaysData, allvalue = false)
+      let Team_weekly_progress_analysis_data = Team_progress_analysis(thisWeeksData, allvalue = false)
+      let Team_monthly_progress_analysis_data = Team_progress_analysis(thisMonthsData, allvalue = false)
+        // 将所有相关数据放入 Team_progress 对象中
+      Team_progress = {
+        all_progress: Team_all_progress_analysis_data,
+        daily_progress: Team_daily_progress_analysis_data,
+        weekly_progress: Team_weekly_progress_analysis_data,
+        monthly_progress: Team_monthly_progress_analysis_data,
+        Monthly_workload_plan: Monthly_workload_plan,
+        Weekly_workload_plan: Weekly_workload_plan,
+        Daily_workload_plan: Daily_workload_plan
+      };
+      results.Team_progress = Team_progress;
     }
     if (analysisname === "全部数据" || analysisname === "班组产值分析") {
+      let Team_output_value = {}
       // let baselineValue = Daily_production_value_plan * date
       let gdpresult = await getcloudgetGdpByDatedata(selectdata)
-      let Team_value_analysis_data = Team_value_analysis(gdpresult, baselineValue)
-      console.log("Team_value_analysis_data", Team_value_analysis_data)
-      Team_value_analysis_data.baselineValue = baselineValue;
-      results.Team_value_analysis_data = Team_value_analysis_data
+      let { todaysData, thisWeeksData, thisMonthsData } = getdata(gdpresult)
+      let Team_all_value_analysis_data = Team_value_analysis(gdpresult, allvalue = true)
+      let Team_daily_value_analysis_data = Team_value_analysis(todaysData, allvalue = false)
+      let Team_weekly_value_analysis_data = Team_value_analysis(thisWeeksData, allvalue = false)
+      let Team_monthly_value_analysis_data = Team_value_analysis(thisMonthsData, allvalue = false)
+      Team_output_value = {
+        all_value: Team_all_value_analysis_data,
+        daily_value: Team_daily_value_analysis_data,
+        weekly_value: Team_weekly_value_analysis_data,
+        monthly_value: Team_monthly_value_analysis_data,
+        Monthly_production_value_plan: Monthly_production_value_plan,
+        Weekly_production_value_plan: Weekly_production_value_plan,
+        Daily_production_value_plan: Daily_production_value_plan,
+      };
+      // Team_value_analysis_data.baselineValue = baselineValue;
+      results.Team_output_value = Team_output_value
       // return Team_value_analysis_data
     }
     if (analysisname === "全部数据" || analysisname === "公司产值分析") {
       let gdpresult = await getcloudgetGdpByDatedata(selectdata)
-      let Company_value_analysis_day_week_month = Company_value_analysis(gdpresult, Daily_outvalue_comp, weekly_outvalue_comp, monthly_outvalue_comp)
-      console.log("Company_value_analysis_day_week_month", Company_value_analysis_day_week_month)
-      Company_value_analysis_day_week_month.day_outvalue_comp = day_outvalue_comp;
+      let Company_value_analysis_day_week_month = Company_value_analysis(gdpresult, Daily_outvalue_comp, weekly_outvalue_comp, Monthly_outvalue_comp)
+      Company_value_analysis_day_week_month.day_outvalue_comp = Daily_outvalue_comp;
       Company_value_analysis_day_week_month.week_outvalue_comp = weekly_outvalue_comp;
-      Company_value_analysis_day_week_month.month_outvalue_comp = monthly_outvalue_comp;
+      Company_value_analysis_day_week_month.month_outvalue_comp = Monthly_outvalue_comp;
       results.Company_value_analysis_day_week_month = Company_value_analysis_day_week_month;
       // return Company_value_analysis_day_week_month
     }
     if (analysisname === "全部数据" || analysisname === "缺陷分析") {
       let queryResults = await getcloudworksdata(selectdata)
       let defects_data = calculateDefect(queryResults)
-      console.log("defects_data", defects_data)
       results.defects_data = defects_data
       // return defects_data
     }
     if (analysisname === "全部数据" || analysisname === "班组历史进度分析") {
       let queryResults = await getcloudworksdata(allselectdata)
       let Team_history_progress_data = Team_history_progress_analysis(queryResults, Daily_workload_plan, Weekly_workload_plan, Monthly_workload_plan)
-      console.log("Team_history_progress_data", Team_history_progress_data)
       Team_history_progress_data._daybaselineValue = Daily_workload_plan;
       Team_history_progress_data._weekbaselineValue = Weekly_workload_plan;
       Team_history_progress_data._monthbaselineValue = Monthly_workload_plan;
@@ -926,23 +971,19 @@ exports.main = async (event, context) => {
     if (analysisname === "全部数据" || analysisname === "班组历史产值分析") {
       let gdpresult = await getcloudgetGdpByDatedata(allselectdata)
       let Team_history_value_analysis_data = Team_history_value_analysis(gdpresult, Daily_production_value_plan, Weekly_production_value_plan, Monthly_production_value_plan)
-      console.log("Team_history_value_analysis_data", Team_history_value_analysis_data)
       Team_history_value_analysis_data.day_baselineValue = Daily_production_value_plan;
       Team_history_value_analysis_data.week_baselineValue = Weekly_production_value_plan;
       Team_history_value_analysis_data.month_baselineValue = Monthly_production_value_plan;
       results.Team_history_value_analysis_data = Team_history_value_analysis_data
       // return { Team_history_value_analysis_data }
     }
-    console.log("results", results)
-    return results
     return {
       statusCode: 200,
       headers: headers,
       body: JSON.stringify(results)
     };
-    // }
+     }
   } catch (err) {
-    return 0
     return {
       statusCode: 500,
       headers: headers,

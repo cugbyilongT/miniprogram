@@ -16,6 +16,7 @@ Page({
     selectedDate: null, // 选中的日期
     selectedWork: null, // 选中的作业
     selectedworktype: null,
+    minDate: "",
     rows: [
     ],
     outerIndex1: 0,
@@ -36,6 +37,11 @@ Page({
       userAccount : getApp().globalData.userAccount,
       rows: [] });
     console.log(this.data.userAccount); // 使用账户信息
+    })
+    let minDate = new Date(2023, 0, 1).getTime();
+    console.log("minDate", minDate);
+    this.setData({
+      minDate: minDate
     })
     
   },

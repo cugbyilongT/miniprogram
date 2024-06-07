@@ -10,7 +10,7 @@
   <project-selector wx:if="{{activeKey === 0}}" projects="{{projects}}" bind:select="handleProjectSelect" style="max-height: 600rpx; overflow: auto;"></project-selector>
   <task-selector wx:if="{{ activeKey === 1 }}" tasks="{{ selectedProject.tasks }}" bind:select="handleTaskSelect" bind:back="handleBackToProjectSelector" />
   <section-selector wx:elif="{{activeKey === 2}}" sections="{{selectedTask.sections}}" bind:select="handleSectionSelect" bind:back="handleBackToTaskSelector" />
-  <van-calendar wx:elif="{{activeKey === 3}}" show="{{calendarShow}}" bind:close="handleBackToSectionSelector" bind:confirm="handleDateSelect" />
+  <van-calendar wx:elif="{{activeKey === 3}}" show="{{calendarShow}}"  min-date="{{ minDate }}" bind:close="handleBackToSectionSelector" bind:confirm="handleDateSelect" />
   <view wx:if="{{activeKey === 4}}" class="collapse-container">
     <view wx:if="{{activeKey === 4}}" class="back-btn" bindtap="handleBackToDataSelector">
       <van-icon name="arrow-left" />

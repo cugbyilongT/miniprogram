@@ -172,9 +172,15 @@ Page({
         console.log(Work_array_temp)
         let Work_array = extractItems(Work_array_temp);
         let temp_project_id = Project_id_array[this.data.Project_index];
-        let Daily_workload_plan = res.result.data[this.data.Project_index].Daily_workload_plan;
-        let Daily_production_value_plan = res.result.data[this.data.Project_index].Daily_production_value_plan;
-        let day_outvalue_comp = res.result.data[this.data.Project_index].day_outvalue_comp;
+        let Monthly_outvalue_comp = res.result.data[this.data.Project_index].Monthly_outvalue_comp;
+        let Monthly_workload_plan = res.result.data[this.data.Project_index].Monthly_workload_plan;
+        let Monthly_production_value_plan = res.result.data[this.data.Project_index].Monthly_production_value_plan;
+        let Weekly_workload_plan = Math.round((Monthly_workload_plan / 4) * 10) / 10;
+        let Weekly_production_value_plan = Math.round((Monthly_production_value_plan / 4) * 10) / 10;
+        let Weekly_outvalue_comp = Math.round((Monthly_outvalue_comp / 4) * 10) / 10;
+        let Daily_workload_plan = Math.round((Monthly_workload_plan / 30) * 10) / 10;
+        let Daily_production_value_plan = Math.round((Monthly_production_value_plan / 30) * 10) / 10;
+        let day_outvalue_comp = Math.round((Monthly_outvalue_comp / 30) * 10) / 10;
         console.log(temp_project_id);
         console.log("Daily_workload_plan", Daily_workload_plan)
         console.log("Daily_production_value_plan", Daily_production_value_plan)
@@ -185,6 +191,12 @@ Page({
           Project_array: Project_array,
           Work_array: Work_array,
           Project_id_array: Project_id_array,
+          Monthly_outvalue_comp: Monthly_outvalue_comp,
+          Monthly_workload_plan: Monthly_workload_plan,
+          Monthly_production_value_plan: Monthly_production_value_plan,
+          Weekly_workload_plan: Weekly_workload_plan,
+          Weekly_production_value_plan: Weekly_production_value_plan,
+          Weekly_outvalue_comp: Weekly_outvalue_comp,
           Daily_workload_plan: Daily_workload_plan,
           Daily_production_value_plan: Daily_production_value_plan,
           day_outvalue_comp: day_outvalue_comp
@@ -815,10 +827,10 @@ convertChineseNumToArabic(chineseNum) {
     });
 
     const weekLabels = Object.keys(weeklyTotals).sort((a, b) => b.localeCompare(a));
-    const weekValues = weekLabels.map(label => weeklyTotals[label]);
+    const weekValues = weekLabels.map(label => Math.round((weeklyTotals[label] || 0) * 100) / 100)
     console.log("weekValues", weekValues)
     const monthLabels = Object.keys(monthlyTotals).sort((a, b) => b.localeCompare(a));
-    const monthValues = monthLabels.map(label => monthlyTotals[label]);
+    const monthValues = monthLabels.map(label => Math.round((monthlyTotals[label] || 0) * 100) / 100);
     console.log("monthValues", monthValues)
     return {
       weekLabels,
@@ -908,7 +920,8 @@ convertChineseNumToArabic(chineseNum) {
 
           // 分别提取排序后的 worker_name 和 worker_value
           const Workername = sortedWorkerData.map(item => item.name);
-          const worker_value = sortedWorkerData.map(item => item.value);
+          const worker_value = sortedWorkerData.map(item => Math.round(item.value * 100) / 100);
+          // const worker_value = sortedWorkerData.map(item => item.value);
 
           // 将 Set 转换为数组并赋值给 worker_name
           //         worker_name = [...workerNameSet];
@@ -1199,33 +1212,33 @@ convertChineseNumToArabic(chineseNum) {
     else if (this.data.analysisName == "班组历史进度分析") {
       textlabel = { title: '班组历史进度', xAxisname: '日期', yAxisname: '长度（米）' }
       if (this.data.isSel == 1) { // 日
-        baselineValue = this.data.Daily_workload_plan * 1; // 日计划值
+        baselineValue = this.data.Daily_workload_plan ; // 日计划值
       } else if (this.data.isSel == 2) { // 周
-        baselineValue = this.data.Daily_workload_plan * 7; // 一周最多7天
+        baselineValue = this.data.Weekly_workload_plan; // 一周最多7天
       } else { // 月
-        baselineValue = this.data.Daily_workload_plan * 30; // 整个日期范围的计划值
+        baselineValue = this.data.Monthly_workload_plan; // 整个日期范围的计划值
       }
       displayText = `计划长度: ${baselineValue} 米`;
     }
     else if (this.data.analysisName == "班组历史产值分析") {
       textlabel = { title: '班组历史产值', xAxisname: '日期', yAxisname: '产值（万元）' }
       if (this.data.isSel == 1) { // 日
-        baselineValue = this.data.Daily_production_value_plan * 1; // 日计划值
+        baselineValue = this.data.Daily_production_value_plan ; // 日计划值
       } else if (this.data.isSel == 2) { // 周
-        baselineValue = this.data.Daily_production_value_plan * 7; // 一周最多7天
+        baselineValue = this.data.Weekly_production_value_plan ; // 一周最多7天
       } else { // 月
-        baselineValue = this.data.Daily_production_value_plan * 30; // 整个日期范围的计划值
+        baselineValue = this.data.Monthly_production_value_plan ; // 整个日期范围的计划值
       }
       displayText = `计划产值: ${baselineValue} 万元`;
     }
     else if (this.data.analysisName == "公司产值分析") {
       textlabel = { title: '公司产值', xAxisname: '日期', yAxisname: '产值（万元）' }
       if (this.data.isSel == 1) { // 日
-        baselineValue = this.data.day_outvalue_comp * 1; // 日计划值
+        baselineValue = this.data.day_outvalue_comp; // 日计划值
       } else if (this.data.isSel == 2) { // 周
-        baselineValue = this.data.day_outvalue_comp * 7; // 一周最多7天
+        baselineValue = this.data.Weekly_outvalue_comp ; // 一周最多7天
       } else { // 月
-        baselineValue = this.data.day_outvalue_comp * 30; // 整个日期范围的计划值
+        baselineValue = this.data.Monthly_outvalue_comp ; // 整个日期范围的计划值
       }
       displayText = `计划产值: ${baselineValue} 万元`;
     }

@@ -525,6 +525,35 @@ Page({
     },
 
     confirmEdit: function() {
+        const message = this.data.message;
+        const now = new Date();
+        const dateTime = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        const updaterName = this.data.userAccount; // 应根据用户上下文动态获取
+        let value = "表单确认"
+        const logEntry = {
+            Updated_name: updaterName,
+            Updated_date: dateTime,
+            Updated_information:value  // 将所有更新的infoName合并为一个字符串
+        };
+        console.log("logEntry", logEntry);
+        // 查找或创建worklog条目
+        const worklogEntry = message.find(msg => msg.infoName === "worklog");
+        if (worklogEntry) {
+            if (!worklogEntry.value) {
+                worklogEntry.value = []; // 如果不存在则初始化
+            }
+            worklogEntry.value.push(logEntry);
+        } else {
+            // 如果没有worklog条目，则创建一个
+            message.push({
+                infoName: "worklog",
+                value: [logEntry]
+            });
+        }
+        this.setData({ message: message });
+        console.log("message11111111111", this.data.message);
+        // 等待上传完成后再执行上传消息到云端的操作
+        this.uploadMessageToCloud();
         // 点击确认后，设置isConfirmed为true，禁止表单编辑
         this.setData({
           isConfirmed: true
@@ -563,7 +592,6 @@ Page({
                 console.log("因井号问题中断后续操作");
                 return; // 如果井号检查未通过，直接返回，不执行后续代码
             }
-
         }
         // 先执行检查井号的函数，根据返回值决定是否继续
         // if (!this.checkWellNumbers()) {
@@ -581,6 +609,10 @@ Page({
                 const updaterName = this.data.userAccount; // 应根据用户上下文动态获取
                 const differentInfoNames = this.compareData(this.data.message, this.data.oldmessage);
                 console.log("differentInfoNames", differentInfoNames);
+                if (differentInfoNames.length === 0) {
+                    console.log("表单未修改，无需更新数据库");
+                    return; // 如果表单未修改，无需更新数据库
+                }
                 const logEntry = {
                     Updated_name: updaterName,
                     Updated_date: dateTime,
@@ -605,11 +637,13 @@ Page({
                 console.log("message11111111111", this.data.message);
                 // 等待上传完成后再执行上传消息到云端的操作
                 this.uploadMessageToCloud();
+                this.data.oldmessage = this.data.message; // 保存旧数据，用于比较新数据与旧数据差异
             })
             .catch(err => {
                 console.error('上传图片失败:', err);
                 wx.showToast({ title: '上传图片失败', icon: 'none' });
             });
+
     },
     uploadMessageToCloud() {
         const { message, workInfo } = this.data;

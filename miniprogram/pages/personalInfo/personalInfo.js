@@ -106,18 +106,19 @@ Page({
             end: "",
           }
           let analysisname = "全部数据",
-          Daily_workload_plan= 300,
-          Daily_production_value_plan= 20,
-          day_outvalue_comp=50
+          Monthly_workload_plan= 300,
+          Monthly_production_value_plan= 20,
+          Monthly_outvalue_comp=50
+          
         wx.cloud.callFunction({
             name: 'Webhomepagedata',
             data: {
                 selectedOptions: selectedOptions,
                 dateRange: dateRange,
                 analysisname: analysisname,
-                Daily_workload_plan: Daily_workload_plan,
-                Daily_production_value_plan: Daily_production_value_plan,
-                day_outvalue_comp: day_outvalue_comp
+                Monthly_workload_plan: Monthly_workload_plan,
+                Monthly_production_value_plan: Monthly_production_value_plan,
+                Monthly_outvalue_comp: Monthly_outvalue_comp
               },
     }).then(res => {
         console.log('云函数查询结果:',res.result)
