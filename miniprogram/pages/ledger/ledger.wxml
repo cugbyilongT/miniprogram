@@ -1,4 +1,8 @@
 <view class="container">
+  <view class="custom-button-container">
+    <button class="custom-action-button" bindtap="saveTemplate">保存模板</button>
+    <button class="custom-action-button" bindtap="loadTemplate">加载模板</button>
+  </view>
   <!-- 表单部分 -->
   <form bindsubmit="uploadMessageToCloud" bindreset="resetForm">
     <view class="form-item" wx:for-item="item1" wx:for="{{message}}" wx:key="infoName" wx:if="{{item1.infoName!== 'worklog'}}">
@@ -41,7 +45,7 @@
         <view class="upload-row">
           <view class="upload-item">
             <van-uploader max-count="{{item1.infoName === '问题图片' ? 999 : 1}}" bind:after-read="afterRead"
-                          bind:delete="deleteFile" data-index="{{index}}" file-list="{{ message[index].value }}"
+                          bind:delete="deleteFile" data-index="{{index}}" file-list="{{ item1.value }}" 
                           deletable="{{true}}" class="uploader"></van-uploader>
           </view>
         </view>

@@ -17,8 +17,8 @@
       返回日期
     </view>
     <van-collapse wx:if="{{activeKey === 4}}" value="{{ activeNames }}" bind:change="onChange">
-      <van-collapse-item wx:for="{{ works }}" wx:for-item="work" wx:for-index="outerIndex" title="{{work.worksType}}" custom-class="custom-collapse-item">
-        <van-cell wx:for="{{ work.worksDetail }}" wx:for-item="detail" wx:for-index="innerIndex" value="{{ detail.workName }}" data-outer-index="{{outerIndex}}" data-inner-index="{{innerIndex}}" custom-class="custom-cell" bind:tap="onCellClick" />
+      <van-collapse-item wx:for="{{ works }}" wx:for-item="work" wx:for-index="outerIndex" wx:key="outerIndex" title="{{work.worksType}}" custom-class="custom-collapse-item">
+        <van-cell wx:for="{{ work.worksDetail }}" wx:for-item="detail" wx:for-index="innerIndex" wx:key="innerIndex" value="{{ detail.workName }}" data-outer-index="{{outerIndex}}" data-inner-index="{{innerIndex}}" custom-class="custom-cell" bind:tap="onCellClick" />
       </van-collapse-item>
     </van-collapse>
   </view>

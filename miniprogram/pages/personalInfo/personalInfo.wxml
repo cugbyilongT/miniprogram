@@ -1,1 +1,7 @@
-<van-button type="primary" block bind:click="selectTap">生成分析图表</van-button>
+ <van-uploader
+  file-list="{{ imageFileList }}"
+  bind:after-read="afterRead"
+  multiple="{{true}}"
+  max-count="3"
+  bind:delete="imageDelete"
+/>

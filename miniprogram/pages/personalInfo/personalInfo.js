@@ -1,7 +1,26 @@
 Page({
-    data:{
-        
-    },
+    data: {
+        fileList: [],
+      },
+    
+      afterRead(event) {
+        const { file } = event.detail;
+        // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+        wx.uploadFile({
+          url: 'cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads', // 仅为示例，非真实的接口地址
+          filePath: file.url,
+          name: 'file',
+          formData: { user: 'test' },
+          success(res) {
+            // 上传完成需要更新 fileList
+            const { fileList = [] } = this.data;
+            fileList.push({ ...file, url: res.data });
+            this.setData({ fileList });
+
+            console.log('upload success', res);
+          },
+        });
+      },
     onLoad:function(options){
         // 生命周期函数--监听页面加载
         
@@ -29,6 +48,34 @@ Page({
     onReachBottom: function() {
         // 页面上拉触底事件的处理函数
     },
+    // 上传图片
+uploadToCloud() {
+    wx.cloud.init();
+    const { fileList } = this.data;
+    if (!fileList.length) {
+      wx.showToast({ title: '请选择图片', icon: 'none' });
+    } else {
+      const uploadTasks = fileList.map((file, index) => this.uploadFilePromise(`my-photo${index}.png`, file));
+      Promise.all(uploadTasks)
+        .then(data => {
+          wx.showToast({ title: '上传成功', icon: 'none' });
+          const newFileList = data.map(item => ({ url: item.fileID }));
+          this.setData({ cloudPath: data, fileList: newFileList });
+        })
+        .catch(e => {
+          wx.showToast({ title: '上传失败', icon: 'none' });
+          console.log(e);
+        });
+    }
+  },
+  
+  uploadFilePromise(fileName, chooseResult) {
+    return wx.cloud.uploadFile({
+      cloudPath: fileName,
+      filePath: chooseResult.url
+    });
+  },
+  
     
 // getRequestURLWithArrayParam(baseURL, paramName, paramValues) {
 //     let queryString = paramValues.map(value => `${encodeURIComponent(paramName)}=${encodeURIComponent(value)}`).join('&');
@@ -94,35 +141,35 @@ Page({
 
         // const url = this.getRequestURLWithArrayParam(baseURL, paramName, paramValues);
         // console.log(url);
-        let selectedOptions = {
-            Project: ["大龙街2024年排水管网清、查项目"],
-            Section: [],
-            Task: [],
-            Work: ["清疏台账"],
-            Workername: ["杨怡"],
-          }
-          let dateRange  = {
-            start: "",
-            end: "",
-          }
-          let analysisname = "全部数据",
-          Monthly_workload_plan= 300,
-          Monthly_production_value_plan= 20,
-          Monthly_outvalue_comp=50
+    //     let selectedOptions = {
+    //         Project: ["大龙街2024年排水管网清、查项目"],
+    //         Section: [],
+    //         Task: [],
+    //         Work: ["清疏台账"],
+    //         Workername: ["杨怡"],
+    //       }
+    //       let dateRange  = {
+    //         start: "",
+    //         end: "",
+    //       }
+    //       let analysisname = "全部数据",
+    //       Monthly_workload_plan= 300,
+    //       Monthly_production_value_plan= 20,
+    //       Monthly_outvalue_comp=50
           
-        wx.cloud.callFunction({
-            name: 'Webhomepagedata',
-            data: {
-                selectedOptions: selectedOptions,
-                dateRange: dateRange,
-                analysisname: analysisname,
-                Monthly_workload_plan: Monthly_workload_plan,
-                Monthly_production_value_plan: Monthly_production_value_plan,
-                Monthly_outvalue_comp: Monthly_outvalue_comp
-              },
-    }).then(res => {
-        console.log('云函数查询结果:',res.result)
-    })
+    //     wx.cloud.callFunction({
+    //         name: 'Webhomepagedata',
+    //         data: {
+    //             selectedOptions: selectedOptions,
+    //             dateRange: dateRange,
+    //             analysisname: analysisname,
+    //             Monthly_workload_plan: Monthly_workload_plan,
+    //             Monthly_production_value_plan: Monthly_production_value_plan,
+    //             Monthly_outvalue_comp: Monthly_outvalue_comp
+    //           },
+    // }).then(res => {
+    //     console.log('云函数查询结果:',res.result)
+    // })
         // let town = "大龙"
     //     wx.cloud.callFunction({
     //         name: 'webgetproject',

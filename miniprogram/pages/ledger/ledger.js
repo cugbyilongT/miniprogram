@@ -23,20 +23,18 @@ Page({
                 _id: workInfo._id
             }
         }).then(res => {
-            console.log(res.result);
             this.setData({
                 workInfo: res.result.data[0]
             });
             if (this.data.workInfo.message !== undefined) {
-                 // 使用 JSON.parse(JSON.stringify()) 来深拷贝 message
-             const messageCopy = JSON.parse(JSON.stringify(this.data.workInfo.message));
+                // 使用 JSON.parse(JSON.stringify()) 来深拷贝 message
+                const messageCopy = JSON.parse(JSON.stringify(this.data.workInfo.message));
                 this.setData({
                     message: this.data.workInfo.message,
                     oldmessage: messageCopy
                 })
             }
-            console.log("this.data.oldmessage", this.data.oldmessage);
-            console.log("this.data.workInfomessage", this.data.workInfo);
+            console.log("this.data.message", this.data.message);
         })
             .catch(err => {
                 console.error(err);
@@ -45,11 +43,10 @@ Page({
         wx.cloud.callFunction({
             name: 'getWellNumber',
             success: res => {
-                console.log('数据库内容：', res.result.data);
                 this.setData({
                     wellNumbers: res.result.data
                 }, () => {
-                    console.log("this.data.wellNumbers", this.data.wellNumbers);
+                    // console.log("this.data.wellNumbers", this.data.wellNumbers);
                 }
                 );
             },
@@ -63,8 +60,6 @@ Page({
             userAccount: userAccount,
             userRole: userRole
         })
-        console.log("this.data.userAccount", this.data.userAccount);
-        console.log("this.data.role", this.data.userRole);
 
     },
     onReady: function () {
@@ -80,9 +75,6 @@ Page({
         if (value.length > 100) {
             value = value.slice(0, 100);
         }
-        console.log(e.currentTarget.dataset.index, value);
-        console.log("this.data.oldmessage", this.data.oldmessage);
-        console.log("this.data.message", this.data.message);
         this.updateMessageItem(e.currentTarget.dataset.index, 'value', value);
     },
 
@@ -143,10 +135,14 @@ Page({
     },
 
     updateMessageItem(index, key, value) {
+        console.log("updateMessageItem",index, key, value);
+        console.log("updateMessageItemthis.data.message", this.data.message);
         this.data.message[index][key] = value;
+        console.log("updateMessageItemthis1",this.data.message)
         this.setData({
             message: this.data.message
         });
+        console.log("updateMessageItemthis2",this.data.message)
     },
     handPickerChange(e) {
         let index = e.currentTarget.dataset.index;
@@ -231,7 +227,6 @@ Page({
         wx.cloud.callFunction({
             name: 'getWellNumber',
             success: res => {
-                console.log('数据库内容：', res.result.data);
                 this.setData({
                     wellNumbers: res.result.data
                 });
@@ -240,13 +235,12 @@ Page({
                 console.error('调用失败：', error);
             }
         });
-        console.log("this.data.wellNumbers1111", this.data.wellNumbers);
     },
 
     // 上传图片
     uploadPicToCloud() {
         wx.cloud.init();
-        wx.showLoading({ title: '上传中' });
+        wx.showLoading({ title: '图片上传中' });
 
         const uploadTasks = this.getUploadTasks();
 
@@ -260,7 +254,7 @@ Page({
             })
             .catch(e => {
                 wx.showToast({ title: '上传失败', icon: 'none' });
-                console.log(e);
+                // console.log(e);
                 // 如果上传失败,返回一个 rejected 的 Promise 对象
                 return Promise.reject(e);
             })
@@ -270,6 +264,7 @@ Page({
     },
 
     getUploadTasks() {
+        let num = 0;
         const uploadTasks = [];
         const message = this.data.message;
         // 定义检查井号是否存在的函数
@@ -280,7 +275,6 @@ Page({
         for (let i = 0; i < this.data.message.length; i++) {
             if (this.data.message[i].type === 'upload') {
                 const fileNames = this.getFileNames(i);
-                console.log("fileNames", fileNames);
                 if (!fileNames) {
                     wx.showModal({
                         title: '提示',
@@ -297,8 +291,45 @@ Page({
 
                 } else {
                     const fileBatches = this.data.message[i].value;
+                    const filevalue = this.data.oldmessage[i].value.length;
+                    console.log("fileBatches", fileBatches);
+
+                    // 提取所有编号
+                    let numbers = fileBatches.map(file => {
+                        const match = file.url.match(/第(\d+)张图片/);
+                        return match ? parseInt(match[1], 10) : null;
+                    }).filter(number => number !== null);
                     const fileTasks = fileBatches.map((file, index) => {
-                        const res = this.uploadFilePromise(`${this.getFileNames(i)}-第${index + 1}张图片.png`, file).then(result => {
+                        // 确保 file.url 是一个字符串并且不以 "cloud://" 开头
+                        if (typeof file.url === 'string' && !file.url.startsWith('cloud://')) {
+                            if (filevalue === 0) {
+                                num = index + 1;
+                            } else {
+                                numbers.sort((a, b) => a - b);
+                                console.log("排序后的编号:", numbers);
+                                // 初始化 num
+                                num = 0;
+                                // 检查连续性并设置 num
+                                for (let j = 0; j < numbers.length; j++) {
+                                    if (numbers[j] !== j + 1) {
+                                        num = j + 1;
+                                        break;
+                                    }
+                                }
+                                // 如果所有编号是连续的，则 num 为最大的编号加 1
+                                if (num === 0) {
+                                    num = numbers.length + 1;
+                                }
+
+                                console.log("确定的num值:", num);
+                                // 将最新的 num 加入 numbers 中
+                                numbers.push(num);
+                                numbers.sort((a, b) => a - b); // 再次排序，确保 numbers 是有序的
+                                console.log("加入最新 num 后的编号:", numbers);
+                            }
+                        }
+                        const res = this.uploadFilePromise(`${this.getFileNames(i)}-第${num}张图片.png`, file).then(result => {
+                            console.log('上传成功', result);
                             const newMessage = this.data.message;
                             newMessage[i].value[index].url = result.fileID;
                             newMessage[i].value[index].thumb = result.fileID;
@@ -314,7 +345,6 @@ Page({
                 }
             }
         }
-        console.log("uplaodTasks", uploadTasks);
         return uploadTasks;
     },
 
@@ -343,6 +373,7 @@ Page({
     },
 
     uploadFilePromise(fileName, chooseResult) {
+        console.log('开始上传文件', fileName, chooseResult);
         return new Promise((resolve, reject) => {
             const filePath = chooseResult.url;
             // 检查是否 filePath 已经是一个云端 URL
@@ -357,7 +388,6 @@ Page({
                 cloudPath,
                 filePath,
                 success: res => {
-                    console.log('上传成功', res.fileID);
                     resolve({ fileID: res.fileID });
                 },
                 fail: err => {
@@ -376,29 +406,20 @@ Page({
         const { file } = event.detail;
         const index = event.target.dataset.index;
         const filevalue = this.data.message[index].value;
-        console.log("index", index);
-        console.log("filevalue", filevalue);
-        console.log("ffffff", file)
+        // 将文件添加到文件列表
         filevalue.push(file);
-        console.log(index, filevalue);
         this.updateMessageItem(index, 'value', filevalue);
     },
 
     deleteFile: function (e) {
-        console.log("deleteFile", e);
         const file = e.detail.file; // 获取触发删除操作的文件索引和文件对象
         const index = e.currentTarget.dataset.index; // 获取触发删除操作的组件索引
         const message = this.data.message; // 假设 this.data.message 是你存储文件的数组
-        console.log("index", index);
-        console.log("file", file);
         // 找到对应字段的文件列表并进行修改
         if (message[index].type === 'upload') {
             const fileList = message[index].value;
-            console.log("fileList", fileList);
             // 找到并删除对应的文件
             const fileIndex = fileList.findIndex((item) => item.url === file.url);
-            console.log("fileIndex", fileIndex);
-            console.log("message", this.data.message);
             if (fileIndex !== -1) {
                 fileList.splice(fileIndex, 1); // 删除找到的文件
             }
@@ -414,16 +435,12 @@ Page({
         const { message, wellNumbers } = this.data;
         //提取work_id
         const _id = this.data.workInfo._id;
-        console.log("work_id", _id);
         // 提取起始井号和终点井号的值
         const startWell = message.find(item => item.infoName === "起始井号")?.value;
         const endWell = message.find(item => item.infoName === "终点井号")?.value;
         const workWell = message.find(item => item.infoName === "施工井号")?.value;
         // 检查是否有有效的井号输入
         if ((workWell && (!startWell || !endWell)) || ((startWell && endWell) && !workWell)) {
-            console.log("startWell", startWell)
-            console.log("endWell", endWell)
-            console.log("wellnumbers1111", wellNumbers)
             wx.cloud.callFunction({
                 name: 'addWellToWork',
                 data: {
@@ -469,26 +486,42 @@ Page({
         }
 
     },
-
     compareData(newdata, olddata) {
         // 创建一个映射，将olddata中的每个元素的infoName作为键，value作为值
         const oldDataMap = new Map(olddata.map(item => [item.infoName, item.value]));
-        // 初始化一个数组来存储不同的infoName
+
+        // 初始化两个数组来存储不同的infoName和详细差异项
         const differentInfoNames = [];
-    
-        // 此函数用于比较两个数组是否相等
-        function arraysEqual(a, b) {
+        const detailedDifferences = [];
+
+        // 深度比较两个值是否相等的函数
+        function deepEqual(a, b) {
             if (a === b) return true; // 完全相同的引用，返回true
-            if (a == null || b == null) return false; // 任一数组为空，返回false
-            if (a.length !== b.length) return false; // 数组长度不等，返回false
-    
-            // 逐元素比较数组中的值
-            for (let i = 0; i < a.length; ++i) {
-                if (a[i] !== b[i]) return false; // 如果有任何元素不同，返回false
+
+            if (typeof a !== typeof b) return false; // 类型不同，返回false
+            if (a == null || b == null) return false; // 任一为null，返回false
+
+            if (Array.isArray(a) && Array.isArray(b)) {
+                if (a.length !== b.length) return false; // 数组长度不同，返回false
+                for (let i = 0; i < a.length; ++i) {
+                    if (!deepEqual(a[i], b[i])) return false; // 递归比较数组元素
+                }
+                return true; // 所有元素相同，返回true
             }
-            return true; // 所有元素相同，返回true
+
+            if (typeof a === 'object' && typeof b === 'object') {
+                const keysA = Object.keys(a);
+                const keysB = Object.keys(b);
+                if (keysA.length !== keysB.length) return false; // 对象键数量不同，返回false
+                for (const key of keysA) {
+                    if (!deepEqual(a[key], b[key])) return false; // 递归比较对象属性
+                }
+                return true; // 所有属性相同，返回true
+            }
+
+            return false; // 其他情况，返回false
         }
-    
+
         // 遍历newdata中的每个元素
         newdata.forEach(item => {
             // 如果infoName为'worklog'，则忽略这个项目，不进行比较
@@ -497,34 +530,99 @@ Page({
             }
             // 从映射中获取相同infoName的老值
             const oldItemValue = oldDataMap.get(item.infoName);
-    
+
             let isDifferent = false; // 初始化差异标记为false
             if (oldItemValue !== undefined) {
-                if (Array.isArray(item.value) && Array.isArray(oldItemValue)) {
-                    // 如果两个值都是数组，则使用数组比较函数
-                    if (!arraysEqual(item.value, oldItemValue)) {
-                        isDifferent = true; // 如果数组不相等，设置差异标记为true
-                    }
-                } else if (item.value !== oldItemValue) {
-                    // 对于非数组值，直接比较
+                if (!deepEqual(item.value, oldItemValue)) {
                     isDifferent = true; // 如果值不同，设置差异标记为true
                 }
             } else {
                 // 如果oldItemValue未定义，即在旧数据中不存在此infoName
                 isDifferent = true;
             }
-    
-            // 如果存在差异，将infoName添加到结果数组中
+
+            // 如果存在差异，将infoName添加到结果数组中，并添加详细差异项
             if (isDifferent) {
                 differentInfoNames.push(item.infoName);
+                detailedDifferences.push({
+                    infoName: item.infoName,
+                    oldValue: oldItemValue,
+                    newValue: item.value
+                });
             }
         });
-        console.log("differentInfoNames", differentInfoNames);
-        // 返回包含所有不同infoName的数组
+
+        // console.log("differentInfoNames", differentInfoNames);
+        // console.log("detailedDifferences", detailedDifferences);
+
+        // 返回包含所有不同infoName的数组和详细差异项数组
         return differentInfoNames;
     },
 
-    confirmEdit: function() {
+    // compareData(newdata, olddata) {
+    //     console.log("newdata", newdata);
+    //     console.log("olddata", olddata);
+    //     // 创建一个映射，将olddata中的每个元素的infoName作为键，value作为值
+    //     const oldDataMap = new Map(olddata.map(item => [item.infoName, item.value]));
+    //     // 初始化一个数组来存储不同的infoName
+    //     const differentInfoNames = [];
+    //     const detailedDifferences = [];
+
+    //     // 此函数用于比较两个数组是否相等
+    //     function arraysEqual(a, b) {
+    //         if (a === b) return true; // 完全相同的引用，返回true
+    //         if (a == null || b == null) return false; // 任一数组为空，返回false
+    //         if (a.length !== b.length) return false; // 数组长度不等，返回false
+
+    //         // 逐元素比较数组中的值
+    //         for (let i = 0; i < a.length; ++i) {
+    //             if (a[i] !== b[i]) return false; // 如果有任何元素不同，返回false
+    //         }
+    //         return true; // 所有元素相同，返回true
+    //     }
+
+    //     // 遍历newdata中的每个元素
+    //     newdata.forEach(item => {
+    //         // 如果infoName为'worklog'，则忽略这个项目，不进行比较
+    //         if (item.infoName === 'worklog') {
+    //             return;
+    //         }
+    //         // 从映射中获取相同infoName的老值
+    //         const oldItemValue = oldDataMap.get(item.infoName);
+
+    //         let isDifferent = false; // 初始化差异标记为false
+    //         if (oldItemValue !== undefined) {
+    //             if (Array.isArray(item.value) && Array.isArray(oldItemValue)) {
+    //                 // 如果两个值都是数组，则使用数组比较函数
+    //                 if (!arraysEqual(item.value, oldItemValue)) {
+    //                     isDifferent = true; // 如果数组不相等，设置差异标记为true
+    //                 }
+    //             } else if (item.value !== oldItemValue) {
+    //                 // 对于非数组值，直接比较
+    //                 isDifferent = true; // 如果值不同，设置差异标记为true
+    //             }
+    //         } else {
+    //             // 如果oldItemValue未定义，即在旧数据中不存在此infoName
+    //             isDifferent = true;
+    //         }
+
+    //         // 如果存在差异，将infoName添加到结果数组中
+    //         if (isDifferent) {
+    //             differentInfoNames.push(item.infoName);
+    //             detailedDifferences.push({
+    //                 infoName: item.infoName,
+    //                 oldValue: oldItemValue,
+    //                 newValue: item.value
+    //             });
+    //         }
+    //     });
+    //     console.log("detailedDifferences", detailedDifferences);
+    //     console.log("differentInfoNames", differentInfoNames);
+    //     // 返回包含所有不同infoName的数组
+    //     return differentInfoNames;
+    // },
+
+    confirmEdit: function () {
         const message = this.data.message;
         const now = new Date();
         const dateTime = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
@@ -533,9 +631,8 @@ Page({
         const logEntry = {
             Updated_name: updaterName,
             Updated_date: dateTime,
-            Updated_information:value  // 将所有更新的infoName合并为一个字符串
+            Updated_information: value  // 将所有更新的infoName合并为一个字符串
         };
-        console.log("logEntry", logEntry);
         // 查找或创建worklog条目
         const worklogEntry = message.find(msg => msg.infoName === "worklog");
         if (worklogEntry) {
@@ -551,40 +648,41 @@ Page({
             });
         }
         this.setData({ message: message });
-        console.log("message11111111111", this.data.message);
         // 等待上传完成后再执行上传消息到云端的操作
         this.uploadMessageToCloud();
         // 点击确认后，设置isConfirmed为true，禁止表单编辑
         this.setData({
-          isConfirmed: true
+            isConfirmed: true
         });
-      
+
         // 显示提示信息
         wx.showToast({
-          title: '页面信息已确认，本页将无法修改',
-          icon: 'none', // 使用'none'表示不显示图标
-          duration: 2000 // 提示框显示时间，默认为1500ms
+            title: '页面信息已确认，本页将无法修改',
+            icon: 'none', // 使用'none'表示不显示图标
+            duration: 2000 // 提示框显示时间，默认为1500ms
         });
-      },
+    },
 
     submitwork(event) {
-            // 提交表单的处理逻辑
+        console.log("submitworkthis.data.message",this.data.message);
+        console.log("submitworkthis.data.oldmessage",this.data.oldmessage)
+        // 提交表单的处理逻辑
         if (this.data.isConfirmed) {
             // 如果已确认，阻止提交
             wx.showToast({
-            title: '无法提交，表单已确认',
-            icon: 'none'
+                title: '无法提交，表单已确认',
+                icon: 'none'
             });
             return;
         }
         const message = this.data.message;
-        console.log("message1111", message);
+        // console.log("message", message);
+
         // 定义检查井号是否存在的函数
         const hasRequiredWellNumbers = () => {
             const requiredWells = ['起始井号', '终点井号', '施工井号'];
             return message.some(msg => requiredWells.includes(msg.infoName));
         };
-        console.log("hasRequiredWellNumbers", hasRequiredWellNumbers());
         // 如果存在指定的井号，执行检查
         if (hasRequiredWellNumbers()) {
             console.log("存在指定的井号，执行检查");
@@ -598,54 +696,210 @@ Page({
         //    console.log("因井号问题中断后续操作");
         //    return; // 如果井号检查未通过，直接返回，不执行后续代码
         //}
+
+
+        // const oldmessage = this.data.oldmessage;
+        // const targets = ["起始井远景图片", "终点井远景图片", "远景（参照物）", "清疏前井室图", "清疏后井室图"];
+    
+        // const invalidEntries = message.filter(item => {
+        //     if (targets.includes(item.infoName) && Array.isArray(item.value) && item.value.length > 0) {
+        //         const [value] = item.value;
+        //         return !(value.location && value.time && value.watermaker === true);
+        //     }
+        //     return false;
+        // }).map(item => item.infoName);
+        // if (invalidEntries.length > 0) {
+        //     invalidEntries.forEach(invalidInfoName => {
+        //         const messageItem = message.find(item => item.infoName === invalidInfoName);
+        //         const oldMessageItem = oldmessage.find(item => item.infoName === invalidInfoName);
+        //         if (messageItem && oldMessageItem) {
+        //             // 深拷贝 oldmessage 中的 value 给 message
+        //             messageItem.value = JSON.parse(JSON.stringify(oldMessageItem.value));
+        //         }
+        //     });
+        // }
+
         this.uploadPicToCloud()
             .then((result) => {
                 if (result === null) {
-                    console.log("上", result);
                     return;
                 }
+                console.log("uploadPicToCloudthis.data.message", this.data.message);
+                wx.showLoading({ title: '信息上传中' });
+                // 定义需要查找的 infoName 项
+                const targetInfoNames = [
+                    '起始井远景图片',
+                    '终点井远景图片',
+                    '远景（参照物）',
+                    '清疏前井室图',
+                    '清疏后井室图'
+                ];
+                let failedInfoNames = []; // 用于存储失败的 infoName 数组
                 const now = new Date();
                 const dateTime = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
                 const updaterName = this.data.userAccount; // 应根据用户上下文动态获取
-                const differentInfoNames = this.compareData(this.data.message, this.data.oldmessage);
+                let differentInfoNames = this.compareData(this.data.message, this.data.oldmessage);
                 console.log("differentInfoNames", differentInfoNames);
                 if (differentInfoNames.length === 0) {
                     console.log("表单未修改，无需更新数据库");
+                    wx.hideLoading();
                     return; // 如果表单未修改，无需更新数据库
                 }
-                const logEntry = {
-                    Updated_name: updaterName,
-                    Updated_date: dateTime,
-                    Updated_information: differentInfoNames // 将所有更新的infoName合并为一个字符串
-                };
-                console.log("logEntry", logEntry);
-                // 查找或创建worklog条目
-                const worklogEntry = message.find(msg => msg.infoName === "worklog");
-                if (worklogEntry) {
-                    if (!worklogEntry.value) {
-                        worklogEntry.value = []; // 如果不存在则初始化
-                    }
-                    worklogEntry.value.push(logEntry);
-                } else {
-                    // 如果没有worklog条目，则创建一个
-                    message.push({
-                        infoName: "worklog",
-                        value: [logEntry]
+                // 先确认 differentInfoNames 中是否有 targetInfoNames 中的内容
+                const relevantInfoNames = differentInfoNames.filter(infoName => targetInfoNames.includes(infoName));
+                let promises = [];
+
+                if (relevantInfoNames.length > 0) {
+                    // 遍历 message 数组，找到目标项并处理
+                    promises = message.map((item) => {
+                        if (relevantInfoNames.includes(item.infoName) && Array.isArray(item.value) && item.value.length > 0) {
+                            let fileID = item.value[0].thumb; // 提取 thumb 作为 fileID
+                            if (fileID) {
+                                // 调用云函数并返回 Promise
+                                return wx.cloud.callFunction({
+                                    name: 'getPicOcr1',
+                                    data: { fileID }
+                                }).then(res => {
+                                    item.value[0].location = res.result.location;
+                                    item.value[0].time = res.result.time;
+                                    item.value[0].watermaker = true; // 假设云函数返回结果在 res.result.ocrResult 中
+                                    // 将返回结果新增到对应的 infoName 的 value 中
+                                    // item.value[0].ocrResult = res.result; // 假设云函数返回结果在 res.result 中
+                                }).catch(err => {
+                                    console.error(err);
+                                    failedInfoNames.push(item.infoName); // 将失败的 infoName 存入数组
+                                    console.log("failedInfoNames", failedInfoNames);
+                                    // 还原对应的 infoName 的 value
+                                    const oldMessageItem = this.data.oldmessage.find(oldItem => oldItem.infoName === item.infoName);
+                                    if (oldMessageItem) {
+                                        item.value = JSON.parse(JSON.stringify(oldMessageItem.value));
+                                    }
+                                    
+                                });
+                            }
+                        }
+                        return Promise.resolve(); // 如果不需要调用云函数，返回一个 resolved 的 Promise
                     });
                 }
-                this.setData({ message: message });
-                console.log("message11111111111", this.data.message);
-                // 等待上传完成后再执行上传消息到云端的操作
-                this.uploadMessageToCloud();
-                this.data.oldmessage = this.data.message; // 保存旧数据，用于比较新数据与旧数据差异
+
+                // 使用 Promise.all 等待所有异步操作完成
+                Promise.all(promises).then(() => {
+                    console.log("所有异步操作完成");
+                    if (failedInfoNames.length > 0) {
+                        // 从 differentInfoNames 中移除与 failedInfoNames 相同的元素
+                        const updatedDifferentInfoNames = differentInfoNames.filter(infoName => !failedInfoNames.includes(infoName));
+                        differentInfoNames = updatedDifferentInfoNames
+                        console.log('Updated differentInfoNames:', updatedDifferentInfoNames);
+                    }
+                    
+                    const logEntry = {
+                        Updated_name: updaterName,
+                        Updated_date: dateTime,
+                        Updated_information: differentInfoNames // 将所有更新的infoName合并为一个字符串
+                    };
+                    // console.log("logEntry", logEntry);
+
+                    // 查找或创建worklog条目
+                    const worklogEntry = message.find(msg => msg.infoName === "worklog");
+                    if (worklogEntry) {
+                        if (!worklogEntry.value) {
+                            worklogEntry.value = []; // 如果不存在则初始化
+                        }
+                        worklogEntry.value.push(logEntry);
+                    } else {
+                        // 如果没有worklog条目，则创建一个
+                        message.push({
+                            infoName: "worklog",
+                            value: [logEntry]
+                        });
+                    }
+                    this.setData({ message: message });
+                    console.log("message11111111111", this.data.message);
+
+                    // 等待上传完成后再执行上传消息到云端的操作
+                    this.uploadMessageToCloud(failedInfoNames);
+                    wx.hideLoading();
+                    // 重新载入页面
+
+                    // 深拷贝 this.data.message 到 this.data.oldmessage
+                    // this.data.oldmessage = JSON.parse(JSON.stringify(this.data.message)); // 深拷贝
+                    wx.navigateBack({
+                        delta: 1, // 返回的页面数，如果 delta 为 1，则返回到上一个页面
+                        success: function(res) {
+                          // 成功后的回调函数
+                          console.log('成功返回上一层页面');
+                        },
+                        fail: function(err) {
+                          // 失败后的回调函数
+                          console.error('返回上一层页面失败', err);
+                        }
+                      });
+
+                }).catch(err => {
+                    console.error('处理过程中出现错误', err);
+                    wx.showToast({ title: '处理过程中出现错误', icon: 'none' });
+                });
             })
-            .catch(err => {
-                console.error('上传图片失败:', err);
-                wx.showToast({ title: '上传图片失败', icon: 'none' });
-            });
+        //     if (relevantInfoNames.length > 0) {
+        //         // 遍历 message 数组，找到目标项并处理
+        //         message.forEach((item) => {
+        //             if (relevantInfoNames.includes(item.infoName) && Array.isArray(item.value) && item.value.length > 0) {
+        //                 console.log("item", item);
+        //                 console.log("item.value", item.value);
+        //                 console.log("item.value.thumb", item.value[0].thumb); // 修正访问方式
+        //                 let fileID = item.value[0].thumb; // 提取 thumb 作为 fileID
+        //                 console.log("fileID", fileID);
+
+        //                 if (fileID) {
+        //                     // 调用云函数
+        //                     wx.cloud.callFunction({
+        //                         name: 'getPicOcr1',
+        //                         data: { fileID }
+        //                     }).then(res => {
+        //                         console.log("getPicOcr1res", res);
+        //                         console.log("getPicOcr1res.result", res.result);
+        //                         // 将返回结果新增到对应的 infoName 的 value 中
+        //                         // item.value[0].ocrResult = res.result; // 假设云函数返回结果在 res.result 中
+        //                     }).catch(err => {
+        //                         console.error(err);
+        //                     });
+        //                 }
+        //             }
+        //         });
+        //     }
+        //     const logEntry = {
+        //         Updated_name: updaterName,
+        //         Updated_date: dateTime,
+        //         Updated_information: differentInfoNames // 将所有更新的infoName合并为一个字符串
+        //     };
+        //     console.log("logEntry", logEntry);
+        //     // 查找或创建worklog条目
+        //     const worklogEntry = message.find(msg => msg.infoName === "worklog");
+        //     if (worklogEntry) {
+        //         if (!worklogEntry.value) {
+        //             worklogEntry.value = []; // 如果不存在则初始化
+        //         }
+        //         worklogEntry.value.push(logEntry);
+        //     } else {
+        //         // 如果没有worklog条目，则创建一个
+        //         message.push({
+        //             infoName: "worklog",
+        //             value: [logEntry]
+        //         });
+        //     }
+        //     this.setData({ message: message });
+        //     console.log("message11111111111", this.data.message);
+        //     // 等待上传完成后再执行上传消息到云端的操作
+        //     this.uploadMessageToCloud();
+        //     this.data.oldmessage = this.data.message; // 保存旧数据，用于比较新数据与旧数据差异
+        // })
+        // .catch(err => {
+        //     console.error('上传图片失败:', err);
+        //     wx.showToast({ title: '上传图片失败', icon: 'none' });
+        // });
 
     },
-    uploadMessageToCloud() {
+    uploadMessageToCloud(invalidEntries) {
         const { message, workInfo } = this.data;
         const { _id } = workInfo;
         wx.cloud.callFunction({
@@ -656,9 +910,21 @@ Page({
             }
         })
             .then(res => {
-                console.log(res.result);
                 if (res.result.success) {
                     wx.showToast({ title: '信息更新成功', icon: 'none' });
+                    if (invalidEntries.length > 0) {
+                        wx.showModal({
+                            title: '提示',
+                            content: `以下项目的图片上传失败，请重新上传：${invalidEntries.join(', ')}`,
+                            showCancel: false,
+                            confirmText: '确定',  // 确定按钮的文字
+                            success: (result) => {
+                                if (result.confirm) {
+                                    console.log('用户点击了确认');
+                                }
+                            }
+                        });
+                    }
                 } else {
                     wx.showToast({ title: '信息更新失败', icon: 'none' });
                     console.error(res.result.error);
@@ -670,8 +936,69 @@ Page({
             });
 
     },
-
-
+// 保存模板方法
+saveTemplate() {
+    const { message } = this.data;
+  
+    // 过滤掉 type 为 'upload' 的项
+    const template = message.filter(item => item.type !== 'upload');
+  
+    // 将模板存储到本地存储或云端
+    wx.setStorage({
+      key: 'formTemplate',
+      data: template,
+      success: () => {
+        wx.showToast({
+          title: '模板保存成功',
+          icon: 'success',
+          duration: 2000
+        });
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '模板保存失败',
+          icon: 'none',
+          duration: 2000
+        });
+        console.error('模板保存失败', err);
+      }
+    });
+  },
+// 加载模板方法
+loadTemplate() {
+    wx.getStorage({
+      key: 'formTemplate',
+      success: (res) => {
+        const template = res.data;
+  
+        // 重新构造 message 数组，保持 'upload' 类型的内容不变
+        const { message } = this.data;
+        const newMessage = message.map(item => {
+          if (item.type === 'upload') {
+            return item;
+          }
+          const templateItem = template.find(t => t.infoName === item.infoName);
+          return templateItem ? { ...item, value: templateItem.value } : item;
+        });
+        
+        this.setData({ message: newMessage });
+        this.data.oldmessage = JSON.parse(JSON.stringify(this.data.message)); // 深拷贝
+        wx.showToast({
+          title: '模板加载成功',
+          icon: 'success',
+          duration: 2000
+        });
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '模板加载失败',
+          icon: 'none',
+          duration: 2000
+        });
+        console.error('模板加载失败', err);
+      }
+    });
+  },
 
     onHide: function () {
         // 生命周期函数--监听页面隐藏
@@ -679,7 +1006,12 @@ Page({
     },
     onUnload: function () {
         // 生命周期函数--监听页面卸载
-
+        // 清理数据
+        this.setData({
+            workInfo: {},
+            message: [],
+            oldmessage: []
+        });
     },
     onPullDownRefresh: function () {
         // 页面相关事件处理函数--监听用户下拉动作

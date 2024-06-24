@@ -128,11 +128,31 @@ Page({
     });
     console.log("workssssss",works)
   },
+  combineDateAndTime(date, time) {
+    const datePart = new Date(date);
+    const timePart = new Date(time);
+  
+    const year = datePart.getFullYear();
+    const month = (datePart.getMonth() + 1).toString().padStart(2, '0');
+    const day = datePart.getDate().toString().padStart(2, '0');
+  
+    const hours = timePart.getHours().toString().padStart(2, '0');
+    const minutes = timePart.getMinutes().toString().padStart(2, '0');
+    const seconds = timePart.getSeconds().toString().padStart(2, '0');
+  
+    const combinedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    return new Date(combinedDate);
+  },
 
   handleDateSelect(e) {
-    console.log(this.getDate(e.detail))
+      // 获取当前时间
+    const currentTime = new Date();
+      // 组合日期和时间
+    const selectedDate = this.combineDateAndTime(e.detail, currentTime);
+    console.log("Combined selectedDate", selectedDate);
     this.setData({
-      selectedDate: this.getDate(e.detail),
+      selectedDate: selectedDate,
+      // selectedDate: this.getDate(e.detail),
       selectedWork: null,
       activeKey: 4,
 
@@ -294,8 +314,10 @@ Page({
   },
 
   createNewWork: async function (event) {
+    console.log("createNewWork",this.data.selectedDate);
     const DateMouthDay = this.formatDatetoMonthDay(this.data.selectedDate); 
     const formattedDate = this.formatDatetoHourMinute(this.data.selectedDate);
+    console.log("formattedDate",formattedDate)
     const workInfo = {
       Project_id: this.data.selectedProject._id || null,  // 选中的项目
       Project:this.data.selectedProject.name||null,  //   选中的项目
@@ -360,8 +382,11 @@ Page({
   },
   formatDatetoHourMinute(dateInfo) {
     const newDate = new Date(dateInfo);
+    console.log("newDate", newDate);
     const hour = (newDate.getHours()).toString().padStart(2, '0'); // 补零
+    console.log("hour", hour);
     const minute = newDate.getMinutes().toString().padStart(2, '0'); // 补零
+    console.log("minute", minute);
     return `${hour}${minute}`;
   },
 

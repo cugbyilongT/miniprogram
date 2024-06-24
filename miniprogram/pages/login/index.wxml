@@ -1,7 +1,7 @@
 <view class="container">
-  <image class="logo" src="/images/logo.png"></image>
-  <text class="app-name">运通水务</text>
-  <text class="app-description">YOUNGTUBE智慧作业管理信息系统</text>
+  <image class="logo" src="/images/logo.png" style="width: 380px; height: 180px;"></image>
+  <!--<text class="app-name">运通水务</text>
+  <text class="app-description">YOUNGTUBE智慧作业管理信息系统</text>-->
 
   <view class="input-container" style="position: relative; left: 1rpx; top: -4rpx; width: 670rpx; height: 137rpx; display: flex; box-sizing: border-box">
     <image class="input-icon" src="/images/account-icon.png"></image>
