@@ -1,0 +1,9 @@
+<view class="container">
+  <view class="task-list">
+    <block wx:for="{{tasks}}" wx:key="index">
+      <view class="task-item">
+        <checkbox checked="{{item.completed}}">{{item.title}}</checkbox>
+      </view>
+    </block>
+  </view>
+</view>

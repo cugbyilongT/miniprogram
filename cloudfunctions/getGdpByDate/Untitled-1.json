@@ -1,0 +1,527 @@
+{
+    "data": [
+        {
+            "_id": "57bdf48a6672831e0133e7ae4294284c",
+            "Date": "2024-06-19T07:04:57.471Z",
+            "DateMouthDay": "6/19",
+            "Project": "大龙街2024年排水管网清、查项目t",
+            "Project_id": "0fb2a58a6639f86700c548937589b8d2",
+            "Section": "大龙街道",
+            "Task": "清疏检测",
+            "Work": "清疏台账",
+            "Workername": "黎颖",
+            "pureDateString": "1504",
+            "message": [
+                {
+                    "infoName": "分区代码",
+                    "label": "请输入分区",
+                    "type": "input",
+                    "value": "QF-08-09"
+                },
+                {
+                    "infoName": "所属污水处理系统",
+                    "label": "请输入所属污水处理系统",
+                    "type": "input",
+                    "value": "前锋污水处理系统"
+                },
+                {
+                    "infoName": "镇街",
+                    "label": "请输入镇街名称",
+                    "type": "input",
+                    "value": "大龙"
+                },
+                {
+                    "infoName": "村居",
+                    "label": "请输入村居名称",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "infoName": "道路名称",
+                    "label": "请输入道路名称",
+                    "type": "input",
+                    "value": "亚运大道"
+                },
+                {
+                    "infoName": "路段地址",
+                    "label": "请输入路段地址",
+                    "type": "input",
+                    "value": "300路灯"
+                },
+                {
+                    "infoName": "涉及河涌",
+                    "label": "请输入涉及河涌",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "涉及内涝点",
+                    "label": "请输入涉及内涝点",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "infoName": "任务来源",
+                    "label": "请选择任务来源",
+                    "options": [
+                        "日常清疏",
+                        "一雨三清",
+                        "70公里渠箱清疏"
+                    ],
+                    "type": "select",
+                    "value": "日常清疏"
+                },
+                {
+                    "infoName": "管道性质",
+                    "label": "请选择管道性质",
+                    "options": [
+                        "W",
+                        "H",
+                        "Y"
+                    ],
+                    "type": "select",
+                    "value": "W"
+                },
+                {
+                    "infoName": "清疏对象",
+                    "label": "请选择清疏对象",
+                    "options": [
+                        "管道",
+                        "明渠",
+                        "篦子"
+                    ],
+                    "type": "select",
+                    "value": "管道"
+                },
+                {
+                    "infoName": "管道类别",
+                    "label": "请输入管道类别",
+                    "type": "input",
+                    "value": "常规管道"
+                },
+                {
+                    "infoName": "管道材质",
+                    "label": "请选择管道材质",
+                    "options": [
+                        "砼",
+                        "HDPE",
+                        "钢管",
+                        "PE"
+                    ],
+                    "type": "select",
+                    "value": "砼"
+                },
+                {
+                    "infoName": "起始井号",
+                    "label": "请输入起始井号",
+                    "type": "input",
+                    "value": "DLWSE050254"
+                },
+                {
+                    "infoName": "起始井远景图片",
+                    "label": "请上传起始井远景图片",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "size": 696621,
+                            "tempFilePath": "http://tmp/wyAchsMPRHd88eb144096c5598562af6c21829add2c7.jpg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-起始井远景图片-第1张图片.png",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-起始井远景图片-第1张图片.png"
+                        }
+                    ]
+                },
+                {
+                    "infoName": "终点井号",
+                    "label": "请输入终点井号",
+                    "type": "input",
+                    "value": "DLYSE360825"
+                },
+                {
+                    "infoName": "终点井远景图片",
+                    "label": "请上传终点井远景图片",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "size": 696621,
+                            "tempFilePath": "http://tmp/8K2A2Fo0VRkY8eb144096c5598562af6c21829add2c7.jpg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-终点井远景图片-第1张图片.png",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-终点井远景图片-第1张图片.png"
+                        }
+                    ]
+                },
+                {
+                    "infoName": "起点埋深",
+                    "label": "请输入起点埋深",
+                    "type": "input",
+                    "value": "1.5"
+                },
+                {
+                    "infoName": "终点埋深",
+                    "label": "请输入终点埋深",
+                    "type": "input",
+                    "value": "1.4"
+                },
+                {
+                    "infoName": "起始井盖材质",
+                    "label": "请选择起始井盖材质",
+                    "options": [
+                        "铸铁",
+                        "钢筋混领土",
+                        "塑料",
+                        "砼",
+                        "复合"
+                    ],
+                    "type": "select",
+                    "value": "铸铁"
+                },
+                {
+                    "infoName": "起始井室材质（有无批荡）",
+                    "label": "请选择起始井井室材质",
+                    "options": [
+                        "混凝土",
+                        "砖砌有批荡",
+                        "砖砌无批荡",
+                        "石块"
+                    ],
+                    "type": "select",
+                    "value": "混凝土"
+                },
+                {
+                    "infoName": "终点井盖材质",
+                    "label": "请选择终点井盖材质",
+                    "options": [
+                        "铸铁",
+                        "钢筋混领土",
+                        "塑料",
+                        "砼",
+                        "复合"
+                    ],
+                    "type": "select",
+                    "value": "铸铁"
+                },
+                {
+                    "infoName": "终点井室材质（有无批荡）",
+                    "label": "请选择终点井井室材质",
+                    "options": [
+                        "混凝土",
+                        "砖砌有批荡",
+                        "砖砌无批荡",
+                        "石块"
+                    ],
+                    "type": "select",
+                    "value": "混凝土"
+                },
+                {
+                    "infoName": "起点井类型",
+                    "label": "请选择起点井类型",
+                    "options": [
+                        "W(J)",
+                        "Y(J)",
+                        "H(J)",
+                        "Y(K)",
+                        "H(K)"
+                    ],
+                    "type": "select",
+                    "value": "W(J)"
+                },
+                {
+                    "infoName": "终点井类型",
+                    "label": "请选择终点井类型",
+                    "options": [
+                        "W(J)",
+                        "Y(J)",
+                        "H(J)",
+                        "Y(K)",
+                        "H(K)"
+                    ],
+                    "type": "select",
+                    "value": "W(J)"
+                },
+                {
+                    "infoName": "井数/篦子数（个）",
+                    "label": "请选择井数/篦子数（个）",
+                    "options": [
+                        "1",
+                        "/"
+                    ],
+                    "type": "select",
+                    "value": "1"
+                },
+                {
+                    "infoName": "图纸长度",
+                    "label": "请输入图纸长度",
+                    "type": "input",
+                    "value": "40"
+                },
+                {
+                    "infoName": "管道长度（米）",
+                    "label": "请输入管道长度",
+                    "type": "input",
+                    "value": "40"
+                },
+                {
+                    "infoName": "明渠长度（米）",
+                    "label": "请输入明渠长度",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "infoName": "雨水篦子联通管长度（米）",
+                    "label": "请输入雨水篦子联通管长度",
+                    "type": "input",
+                    "value": "/"
+                },
+                {
+                    "infoName": "检测方式",
+                    "label": "请选择检测方式",
+                    "options": [
+                        "CCTV",
+                        "QV",
+                        "开井"
+                    ],
+                    "type": "select",
+                    "value": "CCTV"
+                },
+                {
+                    "infoName": "检测方向",
+                    "label": "请选择检测方向",
+                    "options": [
+                        "S(顺流)",
+                        "N(逆流)"
+                    ],
+                    "type": "select",
+                    "value": "S(顺流)"
+                },
+                {
+                    "infoName": "清理状态",
+                    "label": "请确认是否清理",
+                    "options": [
+                        {
+                            "checked": true,
+                            "name": "起始井"
+                        },
+                        {
+                            "checked": false,
+                            "name": "管道"
+                        },
+                        {
+                            "checked": false,
+                            "name": "终点井"
+                        }
+                    ],
+                    "type": "checkbox",
+                    "value": [
+                        "起始井"
+                    ]
+                },
+                {
+                    "infoName": "清疏组别",
+                    "label": "广州市运通水务有限公司",
+                    "type": "input",
+                    "value": "广州市运通水务有限公司"
+                },
+                {
+                    "infoName": "远景（参照物）",
+                    "label": "请上传远景照片",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "location": "深圳市·前海世茂大厦",
+                            "size": 696621,
+                            "tempFilePath": "http://tmp/j0TnHUaHi08q8eb144096c5598562af6c21829add2c7.jpg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-远景（参照物）-第1张图片.png",
+                            "time": "2024.06.17 15:46",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-远景（参照物）-第1张图片.png",
+                            "watermaker": true
+                        }
+                    ]
+                },
+                {
+                    "infoName": "清疏前井室图",
+                    "label": "请上传清疏前井室图",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "location": "深圳市·前海世茂大厦",
+                            "size": 1208347,
+                            "tempFilePath": "http://tmp/Vm1WxAh0Zptm96ca8c277b7b91509d658d8bfef7d004.jpg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-清疏前井室图-第1张图片.png",
+                            "time": "2024.06.17 15:46",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-清疏前井室图-第1张图片.png",
+                            "watermaker": true
+                        }
+                    ]
+                },
+                {
+                    "infoName": "清疏后井室图",
+                    "label": "请上传清疏后井室图",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "location": "深圳市·前海世茂大厦",
+                            "size": 1210887,
+                            "tempFilePath": "http://tmp/9lSVInkFfWAgf9935e8adf8b718e0e1f8e20c5e7164b.jpg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-清疏后井室图-第1张图片.png",
+                            "time": "2024.06.17 15:46",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-清疏后井室图-第1张图片.png",
+                            "watermaker": true
+                        }
+                    ]
+                },
+                {
+                    "infoName": "检测图片（清疏后，顺流）",
+                    "label": "请上传检测图片",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "size": 77946,
+                            "tempFilePath": "http://tmp/oVGoL9vl4i1mac279c36f36d62f43eb1b0f997b93080.jpeg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-检测图片（清疏后，顺流）-第1张图片.png",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-检测图片（清疏后，顺流）-第1张图片.png"
+                        }
+                    ]
+                },
+                {
+                    "infoName": "外业记录表",
+                    "label": "请上传外业记录表",
+                    "type": "upload",
+                    "value": []
+                },
+                {
+                    "infoName": "（内业）第几次清疏",
+                    "label": "请输入清疏次数",
+                    "type": "input",
+                    "value": [
+                        0
+                    ]
+                },
+                {
+                    "infoName": "（内业）清疏类型",
+                    "label": "请选择清疏类型",
+                    "options": [
+                        "基本清疏",
+                        "深度清疏"
+                    ],
+                    "type": "select",
+                    "value": ""
+                },
+                {
+                    "infoName": "发现问题",
+                    "label": "请输入发现的问题",
+                    "type": "input",
+                    "value": "一级破裂、一级破裂、二级支管暗接"
+                },
+                {
+                    "infoName": "问题图片",
+                    "label": "请上传检测图片",
+                    "type": "upload",
+                    "value": [
+                        {
+                            "fileType": "image",
+                            "size": 1249553,
+                            "tempFilePath": "http://tmp/0I3lGYXUtT3F50030b7089daa13dbca55c58060eb50a.png",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-问题图片-第1张图片.png",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-问题图片-第1张图片.png"
+                        },
+                        {
+                            "fileType": "image",
+                            "size": 77921,
+                            "tempFilePath": "http://tmp/i8c6V1DxMddP324f6dd25aba75a0609fc7d270d2b6f3.jpeg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-问题图片-第2张图片.png",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-问题图片-第2张图片.png"
+                        },
+                        {
+                            "fileType": "image",
+                            "size": 89486,
+                            "tempFilePath": "http://tmp/u2aCMSZdgezn1b2fd3793a90b5be9f45526d84b49898.jpeg",
+                            "thumb": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-问题图片-第3张图片.png",
+                            "type": "image",
+                            "url": "cloud://cloudbase-baas-7gioffo8b0741b20.636c-cloudbase-baas-7gioffo8b0741b20-1256603092/uploads/大龙街2024年排水管网清、查项目t-清疏检测-大龙街道-6/19-清疏台账-1504-问题图片-第3张图片.png"
+                        }
+                    ]
+                },
+                {
+                    "infoName": "修复计划时间",
+                    "label": "请选择修复计划时间",
+                    "options": [
+                        "纳入观察",
+                        "转单修复"
+                    ],
+                    "type": "select",
+                    "value": "纳入观察"
+                },
+                {
+                    "infoName": "备注",
+                    "label": "请输入外业记录备注",
+                    "type": "input",
+                    "value": ""
+                },
+                {
+                    "infoName": "worklog",
+                    "type": "log",
+                    "value": [
+                        {
+                            "Creation_time": "2024-06-19 15:05",
+                            "creator": "黎颖"
+                        },
+                        {
+                            "Updated_date": "2024-06-19 15:12",
+                            "Updated_information": [
+                                "分区代码",
+                                "道路名称",
+                                "路段地址",
+                                "任务来源",
+                                "管道性质",
+                                "清疏对象",
+                                "管道材质",
+                                "起始井号",
+                                "起始井远景图片",
+                                "终点井号",
+                                "终点井远景图片",
+                                "起点埋深",
+                                "终点埋深",
+                                "起始井盖材质",
+                                "起始井室材质（有无批荡）",
+                                "终点井盖材质",
+                                "终点井室材质（有无批荡）",
+                                "起点井类型",
+                                "终点井类型",
+                                "井数/篦子数（个）",
+                                "图纸长度",
+                                "管道长度（米）",
+                                "检测方式",
+                                "检测方向",
+                                "清理状态",
+                                "远景（参照物）",
+                                "清疏前井室图",
+                                "清疏后井室图",
+                                "检测图片（清疏后，顺流）",
+                                "发现问题",
+                                "问题图片",
+                                "修复计划时间"
+                            ],
+                            "Updated_name": "黎颖"
+                        }
+                    ]
+                }
+            ],
+            "endWell": "DLYSE360825",
+            "startWell": "DLWSE050254"
+        }
+    ],
+    "exportchoosed": "全部管段为顺流"
+}

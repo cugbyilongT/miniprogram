@@ -1,0 +1,358 @@
+/* page.wxss */
+.container {
+  padding: 20px;
+  flex-direction: column;
+  align-items: left;
+}
+
+.form-item {
+  display: flex;
+  align-items: left;
+  /* 垂直居中 */
+  margin-bottom: 10px;
+
+  flex-direction: row;
+  /* 显式设置为横向排列 */
+
+  margin-bottom: 10px;
+  width: 100%;
+  /* 确保父容器宽度为100%，以便子元素有足够空间横向排列 */
+}
+
+.form-label {
+  width: 30%;
+  /* 标签占用行宽的 30% */
+  font-size: 16px;
+  color: #111010;
+
+}
+
+.form-input {
+  width: 50%;
+  /* 输入框占用行宽的 70% */
+}
+
+.form-input input,
+.form-input picker {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 50%;
+  height: 40px;
+  /* 设置固定高度为40px */
+  padding: 0 1px;
+  background-color: #1aad19;
+  color: white;
+  border-radius: 4px;
+  border: none;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+  /* 每个复选框项之间的间距 */
+}
+
+.checkbox-field {
+  margin-right: 5rpx;
+  /* 文本和复选框之间的间距 */
+}
+
+.submit-button {
+  width: 100%;
+  /* 提交按钮宽度调整为100% */
+  background-color: #19ca63;
+  /* 按钮背景颜色 */
+  color: white;
+  /* 按钮文字颜色 */
+  border: none;
+  /* 去除边框 */
+  padding: 10px 10px;
+  /* 增加上下内边距 */
+  border-radius: 5px;
+  /* 圆角边框 */
+
+  /* 文本居中显示 */
+  text-align: center;
+  /* 水平居中 */
+  line-height: normal;
+  /* 重置行高，可能需要调整具体值 */
+  display: flex;
+  /* 使用flexbox进行布局 */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+}
+
+.img-upload-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  /* 确保容器宽度充满父容器 */
+  justify-content: flex-start;
+  /* 从行的左侧开始对齐子元素 */
+
+}
+
+.upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.upload-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+  width: 100%;
+  /* 考虑到间隙，略小于 25% */
+  margin-left: -50px;
+}
+
+.submit-button1 {
+  margin-left: 325px;
+  margin-top: -100px;
+  /* 在按钮上方添加20px的外边距 */
+  margin-bottom: 20px;
+  /* 在按钮下方添加20px的外边距 */
+  width: 50px;
+  /* 将按钮宽度调整为200px */
+  height: 100px;
+  /* 新增：设置按钮高度为50px */
+  background-color: #19ca63;
+  /* 按钮背景颜色 */
+  color: white;
+  /* 按钮文字颜色 */
+  border: none;
+  /* 去除边框 */
+  padding: 10px 10px;
+  /* 增加上下内边距 */
+  border-radius: 5px;
+  /* 圆角边框 */
+  font-size: 16px;
+  /* 设置文字大小为16px */
+
+  /* 文本居中显示 */
+  text-align: center;
+  /* 水平居中 */
+  line-height: normal;
+  /* 重置行高，可能需要调整具体值 */
+  display: flex;
+  /* 使用flexbox进行布局 */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+}
+
+.dropdown {
+  position: absolute;
+  width: 201px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  top: 85;
+  /* 紧接在输入框下方 */
+  left: 100;
+}
+
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f2f2f2;
+}
+
+.new_well_button {
+  margin-right: 0px;
+  width: 50px;
+  /* 将按钮宽度调整为200px */
+  height: 20;
+  /* 新增：设置按钮高度为50px */
+  font-size: 16px;
+}
+
+
+.log-container {
+  padding: 10px;
+  background-color: #f0f0f0;
+  /* 浅灰色背景 */
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.log-entry {
+  display: flex;
+  flex-direction: column;
+  /* 每个条目按列排布 */
+  margin-bottom: 8px;
+}
+
+.log-part {
+  display: flex;
+  justify-content: flex-start;
+  /* 使信息左对齐 */
+  margin-bottom: 4px;
+  /* 组内部分间隔 */
+}
+
+.log-label {
+  color: #888;
+  /* 灰色字体 */
+  font-size: 14px;
+  /* 缩小字体大小 */
+  margin-right: 10px;
+  /* 标签和内容之间的间隔 */
+}
+
+.log-content {
+  color: #666;
+  /* 内容使用稍深的灰色 */
+  font-size: 14px;
+}
+
+.confirm-button,
+.submit-button {
+  padding: 10px;
+  margin-top: 20px;
+  color: white;
+  background-color: #1aad19;
+  /* 微信绿色 */
+  border: none;
+  border-radius: 5px;
+}
+
+.confirm-button[disabled],
+.submit-button[disabled] {
+  background-color: #ccc;
+  /* 禁用时的灰色 */
+}
+
+
+.confirm-description {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.confirm-button,
+.submit-button {
+  width: 90%;
+  margin: 10px auto 20px;
+  /* 增大底部间距 */
+  padding: 12px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #1aad19;
+  /* 微信绿 */
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  /* 水平居中 */
+  line-height: normal;
+  /* 重置行高，可能需要调整具体值 */
+  display: flex;
+  /* 使用flexbox进行布局 */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  transition: background-color 0.3s, transform 0.3s;
+  /* 添加过渡动画效果 */
+}
+
+.confirm-button:active,
+.submit-button:active {
+  background-color: #159a15;
+  /* 深一点的绿色 */
+  transform: scale(0.95);
+  /* 缩小到95%的原大小 */
+}
+
+.submit-button {
+  margin-top: 30px;
+  /* 增加“确认”和“提交”按钮之间的间距 */
+}
+
+
+
+/* 样式文件 */
+.container {
+  padding: 20px;
+}
+
+.custom-button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.custom-action-button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 8px;
+  /* 缩小按钮的内边距 */
+  font-size: 14px;
+  background-color: #67bd5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+
+  /* 使用 Flexbox 居中文本 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-action-button:first-child {
+  margin-left: 0;
+}
+
+.custom-action-button:last-child {
+  margin-right: 0;
+}
+
+
+
+/* 为 datetime-picker 容器添加样式 */
+.datetime-picker-container {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* 为 van-datetime-picker 组件添加自定义样式 */
+.custom-datetime-picker {
+  border: none;
+  background-color: #ffffff;
+  font-size: 16px;
+}
+
+.input-like-box {
+  display: inline-block;
+  width: 112%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  line-height: 36px;
+  background-color: #f9f9f9;
+}

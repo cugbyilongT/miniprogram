@@ -1,0 +1,17 @@
+/* components/task-selector/task-selector.wxss */
+.section-list{
+  height: 1000rpx; /* 限制最大高度 */
+  width: 500rpx;
+  overflow-y: auto; /* 启用垂直滚动 */
+}
+.back-btn {
+  position: fixed;
+  top: 30rpx; /* 根据实际需求调整垂直位置 */
+  left: 200rpx;
+  z-index: 999; /* 确保返回按钮在最上层 */
+  display: flex;
+  align-items: center;
+}
+.content {
+  padding-top: 100rpx; /* 根据实际需求调整间距大小 */
+}

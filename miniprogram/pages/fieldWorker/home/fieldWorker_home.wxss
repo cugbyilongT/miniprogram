@@ -1,0 +1,137 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx;
+  background-color: #f5f5f5;
+}
+
+.search-input {
+  flex: 1;
+  margin-right: 20rpx;
+  padding: 10rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+.menu-icon {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+}
+
+.step-indicator-column {
+  width: 200rpx;
+  background-color: #f5f5f5;
+  padding: 20rpx 0;
+}
+
+.step-indicator {
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.step-indicator.active {
+  color: #333;
+  font-weight: bold;
+}
+
+.selector-column {
+  flex: 1;
+  padding: 20rpx;
+  overflow-y: auto;
+}
+
+.date-selector,
+.work-details {
+  margin-top: 40rpx;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.container {
+  display: flex;
+}
+
+.van-sidebar {
+  flex: 0 0 200rpx; /* 侧边导航宽度 */
+}
+
+.content {
+  flex: 1;
+  padding: 30rpx;
+}
+.collapse-container {
+  width: 80%; /* 设置容器的宽度为 100% */
+  height: 100%; /* 设置容器的高度为 100% */
+  overflow: auto; /* 添加滚动条 */
+}
+.custom-collapse-item {
+  width: 100%; /* 设置 van-collapse-item 的宽度为 100% */
+}
+.custom-cell {
+  width: 100%; /* 设置 van-cell 的宽度为 100% */
+}
+.back-btn {
+    position: fixed;
+    top: 45rpx; /* 根据实际需求调整垂直位置 */
+    left: 200rpx;
+    z-index: 999; /* 确保返回按钮在最上层 */
+    display: flex;
+    align-items: center;
+  }
+
+
+  .table-header-container {
+    position: absolute;
+
+  }
+  
+  .table-header {
+    display: flex;
+    flex-direction: row;
+    background-color: #0dd1d8;  /* 设置表头的背景颜色 */
+
+  }
+  
+  .table-cell {
+    padding: 10px;
+  }
+  .my-button {
+    width: 40px;
+    height: 50px;
+    font-size: 10px;
+    border: 1px solid rgb(232, 227, 227);
+    background-color: #46cf7b; /* 默认背景颜色 */
+    color: #0a0707; /* 字体颜色 */
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+
+  .my1-button {
+    width: 50px;
+    height: 100px;
+    font-size: 15px;
+  }
+  
+  tr {
+    display: flex;
+    height: 20px;
+  }
+  tr1 {
+    display: flex;
+    height: 30px;
+  }

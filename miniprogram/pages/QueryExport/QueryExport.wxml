@@ -1,0 +1,75 @@
+<view wx:if="{{userRole==='officeWorker'||userRole==='Insidersworker'||userRole==='manager'}}">
+  <text wx:if="{{activeKey === 0}}" class="my-text1">选择查看内容</text>
+  <view wx:if="{{activeKey === 0}}" class="dropdown-container" style="position: relative; left: 0rpx; top: 150rpx">
+    <view wx:if="{{showDropdown}}" class="dropdown-mask"></view>
+    <block wx:for="{{dropdowns}}" wx:key="label">
+      <view class="dropdown">
+        <view class="dropdown-label">{{item.label}}:</view>
+        <input class="dropdown-input" placeholder="{{item.placeholder}}" value="{{item.inputValue}}" data-index="{{index}}" bindinput="onInput" bindtap="onMaskTap" />
+        <button class="dropdown-button" bindtap="toggleDropdown" data-index="{{index}}">▼</button>
+        <view class="dropdown-options {{item.showDropdown ? 'dropdown-options-active' : ' '}}" wx:if="{{item.showDropdown}}">
+          <checkbox-group bindchange="onCheckboxChange" data-index="{{index}}">
+            <label class="checkbox-group label" wx:for="{{dropdowns[index].filteredOptions }}" wx:key="name" wx:for-item="option" class="dropdown-option">
+              <checkbox value="{{option.name}}" checked="{{option.checked}}" />
+              {{option.name}}
+            </label>
+          </checkbox-group>
+        </view>
+      </view>
+    </block>
+  </view>
+  <!-- 开始日期选择 -->
+  <view wx:if="{{activeKey === 0}}" class="dropdown-item" style="position: relative; left: 0rpx; top: 150rpx">
+    <view class="dropdown-label" style="position: relative; left: 0rpx; top: 0rpx">开始日期:</view>
+    <picker mode="date" start="2020-01-01" end="2024-12-31" value="{{dateRange.start}}" bindchange="onStartDateChange">
+      <view class="picker">{{dateRange.start || '请选择开始日期'}}</view>
+    </picker>
+  </view>
+  <!-- 结束日期选择 -->
+  <view wx:if="{{activeKey === 0}}" class="dropdown-item" style="position: relative; left: 0rpx; top: 150rpx">
+    <view class="dropdown-label" style="position: relative; left: 0rpx; top: 0rpx">结束日期:</view>
+    <picker mode="date" start="2020-01-01" end="2024-12-31" value="{{dateRange.end}}" bindchange="onEndDateChange">
+      <view class="picker">{{dateRange.end || '请选择结束日期'}}</view>
+    </picker>
+  </view>
+  <button wx:if="{{activeKey === 0}}" class="my-button" bindtap="onSelectionComplete">提交</button>
+  <!-- 显示查询结果 -->
+  <view wx:if="{{activeKey === 1}}" class="back-btn" bindtap="handleBackToSelector">
+    <van-icon name="arrow-left" />
+    返回查询条件
+  </view>
+  <view wx:if="{{activeKey === 1}}" wx:for="{{queryResults}}" wx:key="unique" class="query-result-item" bindtap="goToCollectInfo" data-item="{{item}}">
+    <text class="date-text">日期：{{item.DateMouthDay}}</text>
+    <text class="project-text">项目：{{item.Project}}</text>
+    <text>工作：{{item.Work}}</text>
+    <text>班组：{{item.Workername}}</text>
+    <text wx:if = "{{item.workWell}}" >施工井号：{{item.workWell}}</text>
+    <text wx:if = "{{item.startWell}}" >起始井号：{{item.startWell}}</text>
+    <text wx:if = "{{item.endWell}}" >终止井号：{{item.endWell}}</text>
+
+  </view>
+  <button wx:if="{{activeKey === 1}}" class="my-button" bindtap="exportchoosed">导出选择</button>
+  <view class="container" wx:if="{{activeKey === 2}}">
+    <!-- 显示查询结果 -->
+    <view wx:if="{{activeKey === 2}}" class="back-btn" bindtap="handleBackTochoice">
+      <van-icon name="arrow-left" />
+      返回查询条件
+    </view>
+    <form bindsubmit="uploadMessageToCloud">
+      <view class="form-item" wx:for-item="item1" wx:for="{{exportoption}}" wx:key="infoName">
+        <view class="form-label">{{item1.infoName}}:</view>
+        <view class="form-input">
+          <input wx:if="{{item1.type == 'input'}}" placeholder="{{item1.label}}" value="{{item1.value}}" data-index="{{index}}" bindinput="handleInput" />
+          <picker wx:elif="{{item1.type == 'select'}}" mode="selector" range="{{item1.options}}" data-index="{{index}}" bindchange="handPickerChange">
+            <view>{{item1.value || item1.label}}</view>
+          </picker>
+        </view>
+      </view>
+    </form>
+  </view>
+  <button wx:if="{{activeKey === 2}}" class="submit-button" bindtap="exportExcel">导出全部</button>
+</view>
+
+<view wx:if="{{userRole==='fieldWorker'}}">
+暂无权限访问
+</view>

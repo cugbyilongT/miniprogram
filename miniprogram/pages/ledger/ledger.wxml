@@ -1,0 +1,122 @@
+<view class="container">
+  <view class="custom-button-container">
+    <button class="custom-action-button" bindtap="deleteWork">删除数据</button>
+    <button class="custom-action-button" bindtap="saveTemplate">保存模板</button>
+    <button class="custom-action-button" bindtap="loadTemplate">加载模板</button>
+  </view>
+  <!-- 表单部分 -->
+  <form bindsubmit="uploadMessageToCloud" bindreset="resetForm">
+    <view class="form-item" wx:for-item="item1" wx:for="{{message}}" wx:key="infoName" wx:if="{{item1.infoName!== 'worklog' && !(item1.hidden && userRole !== 'manager')}}">
+      <view class="form-label">{{item1.infoName}}:</view>
+      <view class="form-input">
+        <!-- 特殊处理起始井号和终点井号的输入 -->
+        <input wx:if="{{item1.type == 'input' && (item1.infoName === '起始井号' || item1.infoName === '终点井号' || item1.infoName === '施工井号' )}}"
+               placeholder="{{item1.label}}" value="{{item1.value}}" data-index="{{index}}" data-name="{{item1.infoName}}"
+               bindinput="handleInputSearch" />
+              
+                <!-- 下拉显示Wellnumber 可点击选择-->
+                <view class="dropdown" wx:if="{{item1.type == 'input' && (item1.infoName === activeInputName)  && 20 > searchResults.length > 0}}" >
+                  <view wx:for="{{searchResults}}" wx:key="index" bindtap="selectWellnumber" data-number="{{item.Wellnumber}}" data-message-index="{{activeInputIndex}}" data-index="{{index}}">
+                    {{item.Wellnumber}}
+                  </view>
+                </view>
+        <!-- 处理其他普通的输入框 -->
+        <input wx:elif="{{item1.type == 'input' && item1.infoName !== '起始井号' && item1.infoName !== '终点井号' && item1.infoName !== '施工井号' }}"
+               placeholder="{{item1.label}}" value="{{item1.value}}" data-index="{{index}}"
+               bindinput="handleInput"  bindblur="{{item1.infoName === '清疏量计算数据' ? 'Calculate_the_clarity' : ''}}"/>
+
+        
+        <!-- 选择器 -->
+        <picker wx:elif="{{item1.type == 'select'}}" mode="selector" range="{{item1.options}}" data-index="{{index}}"
+                 bindchange="handPickerChange">
+          <view>{{item1.value || item1.label}}</view>
+        </picker>
+        <view wx:elif="{{item1.type == 'onlyshow'}}" class="input-like-box">{{item1.value}}</view>
+        <!-- 多选框 -->
+        <checkbox-group wx:if="{{item1.type == 'checkbox'}}" data-index="{{index}}" bindchange="handleCheckboxChange">
+          <block wx:for="{{item1.options}}" wx:key="index">
+            <view class="checkbox-container">
+              <checkbox value="{{item.name}}" checked="{{item.checked}}">{{item.name}}</checkbox>
+            </view>
+          </block>
+        </checkbox-group>
+
+                    <!-- 时间选择框 -->
+            <picker wx:if="{{item1.type == 'time'}}" mode="time" value="{{item1.value}}" bindchange="handleTimeChange" data-index="{{index}}">
+                <view class="picker">{{item1.value || item1.label}}</view>
+            </picker>
+
+
+
+      
+              <!-- 时间选择框
+      <picker wx:elif="{{item1.type == 'time'}}" mode="datetime" value="{{datetime}}"  bindchange="handleDateTimeChange">
+        <view class="picker">{{datetime || '请选择日期和时间'}}</view>
+      </picker> -->
+
+      </view>
+
+
+      <!-- 图片上传部分 -->
+      <view class="img-upload-container" wx:if="{{item1.type === 'upload'}}">
+        <view class="upload-row">
+          <view class="upload-item">
+            <van-uploader max-count="{{item1.infoName === '问题图片' ? 999 : 1}}" bind:after-read="afterRead"
+                          bind:delete="deleteFile" data-index="{{index}}" file-list="{{ item1.value }}" 
+                          deletable="{{true}}" class="uploader"></van-uploader>
+          </view>
+        </view>
+      </view>
+      <button  class ="new_well_button"wx:if="{{item1.type == 'input' && (item1.infoName === '起始井号' || item1.infoName === '终点井号' || item1.infoName === '施工井号' )}}"  bindtap="addNewWellNumber"> 新增 </button>
+    </view>
+    <button class="submit-button" bindtap="submitwork">提交</button>
+
+        <!-- “确认”按钮的描述性文本 -->
+    <view wx:if="{{userRole !== 'fieldWorker'}}" class="confirm-description">
+      由内业人员确认本页内容无误点击确认，确认后本页将无法进行修改，请检查本页内容是否已填入完成。
+    </view>
+    <button class="confirm-button" wx:if="{{userRole !== 'fieldWorker'}}" bindtap="confirmEdit">确认</button>
+  </form>
+
+  <!-- 日志部分 -->
+<view wx:if="{{item.infoName === 'worklog'}}" wx:for="{{message}}" wx:key="infoName" wx:for-item="item" class="log-container">
+  <!-- 遍历worklog的value数组，区分显示创建信息和更新信息 -->
+  <view wx:for="{{item.value}}" wx:key="updateTime" wx:for-item="logEntry" wx:index="index">
+    <!-- 如果是第0条数据，显示创建人和创建时间 -->
+    <view wx:if="{{index === 0}}" class="log-entry">
+      <view class="log-part">
+        <text class="log-label">创建人:</text>
+        <text class="log-content">{{logEntry.creator}}</text>
+      </view>
+      <view class="log-part">
+        <text class="log-label">创建时间:</text>
+        <text class="log-content">{{logEntry.Creation_time}}</text>
+      </view>
+    </view>
+    <!-- 如果不是第0条数据，显示更新人、更新时间和更新信息 -->
+    <view wx:else class="log-entry">
+      <view class="log-part">
+        <text class="log-label">更新人:</text>
+        <text class="log-content">{{logEntry.Updated_name}}</text>
+      </view>
+      <view class="log-part">
+        <text class="log-label">更新时间:</text>
+        <text class="log-content">{{logEntry.Updated_date}}</text>
+      </view>
+      <view class="log-part">
+        <text class="log-label">更新的信息:</text>
+        <text class="log-content">{{logEntry.Updated_information}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+    <!-- 更新表单项目，添加disabled属性 -->
+  <view wx:for="{{message}}" wx:key="unique" class="form-item">
+    <!-- 根据isConfirmed的值禁用或启用输入字段 -->
+    <input wx:if="{{item1.type == 'input'}}" disabled="{{isConfirmed}}" bindinput="handleInput" />
+    <picker wx:elif="{{item1.type == 'select'}}" disabled="{{isConfirmed}}" bindchange="handlePickerChange">
+      <!-- picker内容 -->
+    </picker>
+    <!-- 其他表单元素同理 -->
+  </view>
+</view>

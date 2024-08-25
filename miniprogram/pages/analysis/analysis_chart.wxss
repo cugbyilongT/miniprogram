@@ -1,0 +1,208 @@
+@import "../../lib/weui.wxss";
+.picker{
+    padding: 13px;
+    background-color: #FFFFFF;
+}
+.page {
+    padding-top: 80px;
+}
+.chart-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .chart-image {
+    width: 100%;
+    max-width: 500rpx; /* 可根据需要调整最大宽度 */
+  }
+.main {
+    display: flex; /* 设置为Flexbox容器 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 800rpx;
+    width: 750rpx;
+  }
+  .echarts{
+    width: 50%; /* 让图表宽度自适应 */
+    height: 80vh;
+  }
+  ec-canvas {
+    width: 100%; /* 宽度自适应 */
+    max-width: 600px; /* 最大宽度，可以根据实际情况调整 */
+    height: 100%; /* 高度自适应，确保图表完全填充容器 */
+}
+  
+  .selColor {
+    background: #3FD0AA;
+    color: #ffffff;
+  }
+  
+  .selColor1 {
+    background: #cf390b;
+    color: #ffffff;
+  }
+
+button {
+  padding: 6px 20px; /* 增加填充，使按钮更大，更容易点击 */
+  border: 1px solid #ccc; /* 默认边框 */
+  background-color: #f8f8f8; /* 默认背景色 */
+  color: #333; /* 默认文字颜色 */
+  border-radius: 4px; /* 轻微的圆角边框，提升美观度 */
+  transition: all 0.3s ease; /* 平滑过渡效果应用于所有属性改变 */
+  cursor: pointer; /* 显示手型光标，表明这是一个可点击的元素 */
+  margin-top: 20px; /* 下移按钮，数值可根据需要调整 */
+}
+
+.selColor {
+  background-color: #2bd36b; /* 绿色背景，注释中的蓝色背景应更正 */
+  color: white;
+  border: none;
+}
+
+button:focus {
+  outline: none; /* 移除焦点时的轮廓线 */
+  box-shadow: 0 0 5px 2px rgba(43, 211, 107, 0.5); /* 焦点状态时添加阴影，提高可见性 */
+}
+
+/* 媒体查询，为小屏幕调整布局 */
+@media (max-width: 600px) {
+  .echarts {
+      height: 60vh; /* 在小屏幕上调整高度 */
+  }
+}
+
+/* 基本样式 */
+.rank-item {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 红榜样式 */
+.red {
+  color: #fff;
+  background-color: #f44336;
+}
+
+/* 黑榜样式 */
+.black {
+  color: #fff;
+  background-color: #333;
+}
+
+/* 普通样式 */
+.normal {
+  color: #666;
+  background-color: #f7f7f7;
+}
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
+.table {
+  display: block;
+  width: 100%; /* 整个表格的宽度 */
+}
+.header {
+  background-color: #e4ebe8;
+  
+}
+
+.header, .tr, .th, .td {
+  display: flex;
+  justify-content: center;
+  align-items: center
+  
+}
+.tr:not(.header):nth-child(even) {
+  background-color: #f9f9f9; /* 浅灰色背景 */
+}
+
+.tr:not(.header):nth-child(odd) {
+  background-color: #e9e9e9; /* 略深一点的灰色背景 */
+}
+
+.tr {
+  border-top: 1px solid #ccc; /* 顶部边框线 */
+  
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ccc; /* 底部边框线 */
+}
+
+.th, .td {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  border-left: 1px solid #161414; /* 添加左侧边框 */
+  font-size: 12px; /* 调整字体大小 */
+}
+
+.th:first-child, .td:first-child {
+  border-left: none; /* 第一个单元格去掉左边框 */
+}
+.tr {
+  display: flex;
+  width: 100%; /* 确保行宽度为100% */
+}
+.bg-w {
+  position: sticky;
+  top: 0; /* 粘贴到视口顶部 */
+  background-color: #ccc;
+  z-index: 1000; /* 确保它在其他内容之上 */
+}
+
+.defect-group {
+  display: flex;
+}
+
+.category {
+  width: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(224, 220, 211);
+  font-size: 14px;
+  text-align: center;
+  border-right: 1px solid #ccc;
+  writing-mode: vertical-lr;
+  border-bottom: 1px solid #ccc; /* 底部边框线 */
+}
+
+.defect-list {
+  flex: 1;
+}
+
+.th, .td {
+  min-height: 50px; /* 确保所有单元格高度一致，适当调整 */
+  
+}
+
+
+.th:first-child, .td:first-child {
+  border-left: none;
+}
+
+.category-placeholder {
+  width: 16px;
+
+}
+
+/* styles.css */
+.defect-group {
+  margin-bottom: 20px; /* 添加底部边距 */
+}
+
+/* 最后一个缺陷组不需要底部间隔 */
+.defect-group:last-child {
+  margin-bottom: 0;
+}

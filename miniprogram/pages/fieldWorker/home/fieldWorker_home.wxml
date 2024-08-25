@@ -1,0 +1,100 @@
+
+<van-sidebar activeKey="{{ activeKey }}">
+  <van-sidebar-item title="step1 项目列表" disabled="{{ activeKey === 0 ? false : true }}" />
+  <van-sidebar-item title="step2 任务列表" disabled="{{ activeKey === 1? false : true }}" />
+  <van-sidebar-item title="step3 路段列表" disabled="{{ activeKey === 2 ? false : true }}" />
+  <van-sidebar-item title="step4 施工日期" disabled="{{ activeKey===3 ? false : true  }}" />
+  <van-sidebar-item title="step5 作业内容" disabled="{{ activeKey===4 ? false : true  }}" />
+</van-sidebar>
+<view class="content" style="width: 552rpx; height: 1374rpx; display: flex; box-sizing: border-box; position: relative; left: 149rpx; top: -685rpx">
+  <project-selector wx:if="{{activeKey === 0}}" projects="{{projects}}" bind:select="handleProjectSelect" style="max-height: 600rpx; overflow: auto;"></project-selector>
+  <task-selector wx:if="{{ activeKey === 1 }}" tasks="{{ selectedProject.tasks }}" bind:select="handleTaskSelect" bind:back="handleBackToProjectSelector" />
+  <section-selector wx:elif="{{activeKey === 2}}" sections="{{selectedTask.sections}}" bind:select="handleSectionSelect" bind:back="handleBackToTaskSelector" />
+  <van-calendar wx:elif="{{activeKey === 3}}" show="{{calendarShow}}"  min-date="{{ minDate }}" bind:close="handleBackToSectionSelector" bind:confirm="handleDateSelect" />
+  <view wx:if="{{activeKey === 4}}" class="collapse-container">
+    <view wx:if="{{activeKey === 4}}" class="back-btn" bindtap="handleBackToDataSelector">
+      <van-icon name="arrow-left" />
+      返回日期
+    </view>
+    <van-collapse wx:if="{{activeKey === 4}}" value="{{ activeNames }}" bind:change="onChange">
+      <van-collapse-item wx:for="{{ works }}" wx:for-item="work" wx:for-index="outerIndex" wx:key="outerIndex" title="{{work.worksType}}" custom-class="custom-collapse-item">
+        <van-cell wx:for="{{ work.worksDetail }}" wx:for-item="detail" wx:for-index="innerIndex" wx:key="innerIndex" value="{{ detail.workName }}" data-outer-index="{{outerIndex}}" data-inner-index="{{innerIndex}}" custom-class="custom-cell" bind:tap="onCellClick" />
+      </van-collapse-item>
+    </van-collapse>
+  </view>
+  <view wx:if="{{activeKey === 5}}" class="back-btn" bindtap="handleBackToWorkSelector">
+    <van-icon name="arrow-left" />
+    返回作业内容
+  </view>
+  <view wx:if="{{activeKey === 5}}">
+    <view class="titel" style="position: absolute; left: 150rpx; top: 80rpx">
+      {{selectedworktype.worksType }}--{{selectedWork.workName}}
+    </view>
+    <view class="table-header" style=" position: relative; left: 10rpx; top: 100rpx;width: 480rpx; height: 80rpx; display: flex; box-sizing: border-box">
+      <view class="table-cell" style="position: relative; left: 30rpx; top: 0rpx">时间</view>
+      <view class="table-cell" style="position: relative; left: 150rpx; top: 0rpx">操作</view>
+    </view>
+
+    
+<view>
+  <button class="my-button" style="position: relative; left: 290rpx; top: 20rpx" bindtap="createNewWork">
+    新建
+  </button>
+  <table border="1" hidden="{{hidden}}">
+    <template name="row" data="{{item}}">
+      <tr>
+        <td style="position: relative; left: 50rpx; top: 0rpx">{{item.pureDateString}}</td>
+        <td>
+          <button class="my1-button" bindtap="editWork" data-workId="{{item.work}}" style="position: relative; left: 100rpx; top: -20rpx; width: 141rpx; height: 85rpx; display: block; box-sizing: border-box">
+            编辑
+          </button>
+        </td>
+        <td>
+          <button class="my1-button" bindtap="deleteWork" data-workId="{{item.work}}" style="position: relative; left: 100rpx; top:-20rpx; width: 150rpx; height: 90rpx; display: block; box-sizing: border-box">
+            删除
+          </button>
+        </td>
+        </tr>
+      <tr1>
+        <td colspan="3" style="position: relative; left: 50rpx; top: 0rpx; font-size: 12px; color: #888;">
+          {{item.startWell}} - {{item.endWell}}
+        </td>
+      </tr1>
+    </template>
+    <tbody>
+      <block wx:for="{{rows}}" wx:key="index">
+        <template is="row" data="{{item}}"></template>
+      </block>
+    </tbody>
+  </table>
+</view>
+    
+    <!-- <view>
+      <button class="my-button" style="position: relative; left: 290rpx; top: 150rpx" bindtap="createNewWork">
+        新建
+      </button>
+      <table border="1" hidden="{{hidden}}">
+        <template name="row" data="{{item}}">
+          <tr>
+            <td style="position: relative; left: 50rpx; top: 0rpx">{{item.pureDateString}}</td>
+            <td>
+              <button class="my1-button" bindtap="editWork" data-workId="{{item.work}}" style="position: relative; left: 100rpx; top: -20rpx; width: 141rpx; height: 85rpx; display: block; box-sizing: border-box">
+                编辑
+              </button>
+            </td>
+            <td>
+              <button class="my1-button" bindtap="deleteWork" data-workId="{{item.work}}" style="position: relative; left: 100rpx; top:-20rpx; width: 150rpx; height: 90rpx; display: block; box-sizing: border-box">
+                删除
+              </button>
+            </td>
+          </tr>
+        </template>
+        <tbody>
+          <template is="row" data="{{item}}" wx:for="{{rows}}" wx:key="index"></template>
+        </tbody>
+      </table>
+    </view> -->
+
+
+  </view>
+</view>

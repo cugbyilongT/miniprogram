@@ -1,0 +1,33 @@
+/* pages/collectInfo/collectInfo.wxss */
+.input-field {
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.select-field {
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.submit-btn {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10rpx 20rpx;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 28rpx;
+  margin: 40rpx 0;
+  cursor: pointer;
+  border-radius: 10rpx;
+}
+.submit-btn:hover {
+  background-color: #3e8e41;
+}

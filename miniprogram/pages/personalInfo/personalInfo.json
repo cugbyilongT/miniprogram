@@ -1,0 +1,18 @@
+{
+    "usingComponents": {
+      "van-sidebar": "@vant/weapp/sidebar/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-calendar": "@vant/weapp/calendar/index",
+      "van-sidebar-item": "@vant/weapp/sidebar-item/index",
+      "project-selector": "/components/project-selector/project-selector",
+      "section-selector": "/components/section-selector/section-selector",
+      "task-selector": "/components/task-selector/task-selector",
+      "van-collapse": "@vant/weapp/collapse/index",
+      "van-collapse-item": "@vant/weapp/collapse-item/index",
+      "van-icon":"@vant/weapp/icon/index",
+      "van-row":"@vant/weapp/row/index",
+      "van-col": "@vant/weapp/col/index",
+      "van-button":"@vant/weapp/button/index",
+      "van-uploader":"@vant/weapp/uploader/index"
+      }
+  }

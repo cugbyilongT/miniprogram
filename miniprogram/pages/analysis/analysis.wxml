@@ -1,0 +1,18 @@
+
+<van-tabs wx:if="{{userRole==='officeWorker'||userRole==='Insidersworker'||userRole==='manager'}}"    animated swipeable>
+  <van-tab wx:for="{{ categoryKeys }}" wx:key="index" title="{{ item }}">
+    <view wx:for="{{ analysis_types[item] }}" wx:for-item="analysis" wx:key="analysisIndex">
+      <van-cell
+        title="{{ analysis.analysis_name }}"
+        value="{{ analysis.analysis_show }}"
+        label="{{ analysis.analysis_detail }}"
+        border="{{ false }}"
+        bind:click="navigateToChart"
+        data-analysis="{{ analysis.analysis_name }}"
+      />
+    </view>
+  </van-tab>
+</van-tabs>
+<view wx:if="{{userRole==='fieldWorker'}}">
+暂无权限访问
+</view>

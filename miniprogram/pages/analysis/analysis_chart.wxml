@@ -1,0 +1,292 @@
+<view wx:if="{{analysisName==='班组进度分析'||analysisName==='公司产值统计（纵向对比）'||analysisName==='负责人产值统计（单负责人纵向对比）' ||analysisName==='项目产值统计（单项目纵向对比）' ||analysisName==='项目+班组产值统计（单班组纵向对比）'||analysisName==='公司产值统计（负责人横向对比）' ||analysisName==='项目产值统计（项目横向对比）' ||analysisName==='项目+班组产值统计（班组横向对比）' }}" class="chart">
+    <view wx:if="{{analysisName==='班组进度分析'}}"> 
+        <view class="section">
+            <view class="section__title">选择项目</view>
+            <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+                <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+            </picker>
+        </view>
+        <view class="section">
+            <view class="section__title">选择进度计算依据</view>
+            <picker bindchange="bind_Work_PickerChange" value="{{Work_index}}" range="{{Work_array}}">
+                <view class="picker">当前选择：{{Work_array[Work_index]}}</view>
+            </picker>
+        </view>
+    </view>   
+    <view wx:if="{{analysisName==='负责人产值统计（单负责人纵向对比）'}}">
+                <view class="section">
+            <view class="section__title">选择负责人</view>
+            <picker bindchange="bind_Manager_PickerChange" value="{{Manager_index}}" range="{{Manager_array}}">
+                <view class="picker">当前选择：{{Manager_array[Manager_index]}}</view>
+            </picker>
+        </view>
+    </view>
+    <view wx:if="{{analysisName==='项目产值统计（单项目纵向对比）'}}">
+        <view class="section">
+            <view class="section__title">选择项目</view>
+            <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+                <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+            </picker>
+        </view>
+
+    </view>
+    <view wx:if="{{analysisName==='项目+班组产值统计（单班组纵向对比）' }}">
+        <view class="section">
+            <view class="section__title">选择项目</view>
+            <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+                <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+            </picker>
+        </view>
+        <view class="section">
+            <view class="section__title">选择班组</view>
+            <picker bindchange="bind_User_PickerChange" value="{{User_index}}" range="{{User_array}}">
+                <view class="picker">当前选择：{{User_array[User_index]}}</view>
+            </picker>
+        </view>
+    </view>
+    <view wx:if="{{analysisName==='项目+班组产值统计（班组横向对比）' }}">
+        <view class="section">
+            <view class="section__title">选择项目</view>
+            <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+                <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+            </picker>
+        </view>
+    </view>
+
+
+    <view class="section">
+        <view class="section__title" style="width: 358rpx; height: 49rpx; display: block; box-sizing: border-box">
+            统计开始日期
+        </view>
+        <picker mode="date" value="{{date}}" start="2023-09-01" end="2025-09-01" bindchange="bindSTDateChange">
+            <view class="picker" style="width: 393rpx; height: 99rpx; display: block; box-sizing: border-box">
+                当前选择: {{analysis_st_date}}
+            </view>
+        </picker>
+    </view>
+    <view class="section">
+        <view class="section__title" style="width: 352rpx; height: 49rpx; display: block; box-sizing: border-box; position: relative; left: 399rpx; top: -141rpx">
+            统计结束日期
+        </view>
+        <picker mode="date" value="{{date}}" start="2023-09-01" end="2025-09-01" bindchange="bindEDDateChange">
+            <view class="picker" style="width: 362rpx; height: 99rpx; display: block; box-sizing: border-box; position: relative; left: 389rpx; top: -147rpx">
+                当前选择: {{analysis_ed_date}}
+            </view>
+        </picker>
+    </view>
+    <van-button type="primary" block bind:click="selectTap">生成分析图表</van-button>
+    <!-- 使用ec-canvas组件 -->
+    <view wx:if="{{activeKey === 2}}" style="display: flex;">
+        <button wx:if="{{activeKey === 2}}" class="{{isSel == 1 ? 'selColor': ''}}" bindtap="workerselectTap" data-sel="1">
+            日
+        </button>
+        <button wx:if="{{activeKey === 2}}" class="{{isSel == 2 ? 'selColor': ''}}" bindtap="workerselectTap" data-sel="2">
+            周
+        </button>
+        <button wx:if="{{activeKey === 2}}" class="{{isSel == 3 ? 'selColor': ''}}" bindtap="workerselectTap" data-sel="3">
+            月
+        </button>
+    </view>
+    <view class="main">
+        <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ initPieChart }}" force-use-old-canvas="true"></ec-canvas>
+    </view>
+    <!-- <view wx:if="{{analysisName !== '公司产值分析'}}" class="main">
+        <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ initPieChart }}" force-use-old-canvas="true"></ec-canvas>
+    </view> -->
+    <!-- <view wx:if="{{analysisName !== '公司产值分析'}}">
+        <view class="title">排名：</view>
+        <block wx:for="{{displayData}}" wx:key="index">
+            <view class="rank-item {{isLimited ? (index < 3 ? 'red' : 'black') : 'normal'}}">
+                第{{item.rank}}名: {{item.name}}
+            </view>
+        </block>
+    </view> -->
+    <view class="main">
+        <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ initBarChart }}" force-use-old-canvas="true"></ec-canvas>
+    </view>
+</view>
+<view wx:if="{{analysisName==='每日数据导出'}}" class="chart">
+        <view class="section">
+        <view class="section__title" style="width: 358rpx; height: 49rpx; display: block; box-sizing: border-box">
+            统计开始日期
+        </view>
+        <picker mode="date" value="{{date}}" start="2023-09-01" end="2025-09-01" bindchange="bindSTDateChange">
+            <view class="picker" style="width: 393rpx; height: 99rpx; display: block; box-sizing: border-box">
+                当前选择: {{analysis_st_date}}
+            </view>
+        </picker>
+    </view>
+    <view class="section">
+        <view class="section__title" style="width: 352rpx; height: 49rpx; display: block; box-sizing: border-box; position: relative; left: 399rpx; top: -141rpx">
+            统计结束日期
+        </view>
+        <picker mode="date" value="{{date}}" start="2023-09-01" end="2025-09-01" bindchange="bindEDDateChange">
+            <view class="picker" style="width: 362rpx; height: 99rpx; display: block; box-sizing: border-box; position: relative; left: 389rpx; top: -147rpx">
+                当前选择: {{analysis_ed_date}}
+            </view>
+        </picker>
+    </view>
+    <van-button type="primary" block bind:click="exportData">导出数据</van-button>
+
+
+
+</view>
+
+<view wx:if="{{analysisName==='缺陷情况'}}" class="chart">
+    <view class="section">
+        <view class="section__title">选择项目</view>
+        <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+            <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+        </picker>
+    </view>
+    <view class="section">
+        <view class="section__title">选择进度计算依据</view>
+        <picker bindchange="bind_Work_PickerChange" value="{{Work_index}}" range="{{Work_array}}">
+            <view class="picker">当前选择：{{Work_array[Work_index]}}</view>
+        </picker>
+    </view>
+    <view class="section">
+        <view class="section__title" style="width: 358rpx; height: 49rpx; display: block; box-sizing: border-box">
+            统计开始日期
+        </view>
+        <picker mode="date" value="{{date}}" start="2023-09-01" end="2025-09-01" bindchange="bindSTDateChange">
+            <view class="picker" style="width: 393rpx; height: 99rpx; display: block; box-sizing: border-box">
+                当前选择: {{analysis_st_date}}
+            </view>
+        </picker>
+    </view>
+    <view class="section">
+        <view class="section__title" style="width: 352rpx; height: 49rpx; display: block; box-sizing: border-box; position: relative; left: 399rpx; top: -141rpx">
+            统计结束日期
+        </view>
+        <picker mode="date" value="{{date}}" start="2023-09-01" end="2025-09-01" bindchange="bindEDDateChange">
+            <view class="picker" style="width: 362rpx; height: 99rpx; display: block; box-sizing: border-box; position: relative; left: 389rpx; top: -147rpx">
+                当前选择: {{analysis_ed_date}}
+            </view>
+        </picker>
+    </view>
+    <van-button type="primary" block bind:click="defectselectTap">生成分析图表</van-button>
+    <!-- 使用ec-canvas组件 -->
+    <view class="main">
+        <ec-canvas id="mychart-dom-bar-structural" canvas-id="mychart-bar" ec="{{ initdefectBarChart }}" force-use-old-canvas="true"></ec-canvas>
+    </view>
+    <view class="main">
+        <ec-canvas id="mychart-dom-bar-functional" canvas-id="mychart-bar" ec="{{ initdefectBarChart }}" force-use-old-canvas="true"></ec-canvas>
+    </view>
+    <view wx:if="{{showTable}}">
+        <view class="table">
+            <view class="tr header">
+                <view class="th">分类 / 等级</view>
+                <view class="category-placeholder"></view>
+                <view class="th">1级(轻微)</view>
+                <view class="th">2级(中等)</view>
+                <view class="th">3级(严重)</view>
+                <view class="th">4级(重大)</view>
+                <view class="th">小计</view>
+            </view>
+            <!-- 结构性缺陷部分 -->
+            <view class="defect-group">
+                <view class="category">结构性缺陷</view>
+                <view class="defect-list">
+                    <block wx:for="{{structural_defects_Table_data}}" wx:key="name">
+                        <view class="tr">
+                            <view class="td">{{item.name}}</view>
+                            <view class="td">{{item['1级'] || 0}}</view>
+                            <view class="td">{{item['2级'] || 0}}</view>
+                            <view class="td">{{item['3级'] || 0}}</view>
+                            <view class="td">{{item['4级'] || 0}}</view>
+                            <view class="td">{{item['小计'] || 0}}</view>
+                        </view>
+                    </block>
+                </view>
+            </view>
+            <!-- 功能性缺陷部分 -->
+            <view class="defect-group">
+                <view class="category">功能性缺陷</view>
+                <view class="defect-list">
+                    <block wx:for="{{functional_defects_Table_data}}" wx:key="name">
+                        <view class="tr">
+                            <view class="td">{{item.name}}</view>
+                            <view class="td">{{item['1级'] || 0}}</view>
+                            <view class="td">{{item['2级'] || 0}}</view>
+                            <view class="td">{{item['3级'] || 0}}</view>
+                            <view class="td">{{item['4级'] || 0}}</view>
+                            <view class="td">{{item['小计'] || 0}}</view>
+                        </view>
+                    </block>
+                </view>
+            </view>
+            <view class="defect-group">
+                <view class="defect-list">
+                    <block wx:for="{{totalDefectsSummary}}" wx:key="name">
+                        <view class="tr">
+                            <view class="td">{{item.name}}</view>
+                            <view class="category-placeholder"></view>
+                            <view class="td">{{item['1级'] || 0}}</view>
+                            <view class="td">{{item['2级'] || 0}}</view>
+                            <view class="td">{{item['3级'] || 0}}</view>
+                            <view class="td">{{item['4级'] || 0}}</view>
+                            <view class="td">{{item['小计'] || 0}}</view>
+                        </view>
+                    </block>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view wx:if="{{analysisName==='班组历史进度分析'}}" class="chart">
+    <view wx:if="{{analysisName==='班组历史进度分析'}}">
+        <view class="section">
+            <view class="section__title">选择项目</view>
+            <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+                <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+            </picker>
+        </view>
+        <view class="section">
+            <view class="section__title">选择产值计算依据</view>
+            <picker bindchange="bind_Work_PickerChange" value="{{Work_index}}" range="{{Work_array}}">
+                <view class="picker">当前选择：{{Work_array[Work_index]}}</view>
+            </picker>
+        </view>
+        <view class="section">
+            <view class="section__title">选择班组</view>
+            <picker bindchange="bind_User_PickerChange" value="{{User_index}}" range="{{User_array}}">
+                <view class="picker">当前选择：{{User_array[User_index]}}</view>
+            </picker>
+        </view>
+    </view>
+
+    <van-button type="primary" block bind:click="selectTap1">生成分析图表</van-button>
+    <view wx:if="{{activeKey === 1}}" style="display: flex;">
+        <button wx:if="{{activeKey === 1}}" class="{{isSel == 1 ? 'selColor': ''}}" bindtap="workerselectTap" data-sel="1">
+            日
+        </button>
+        <button wx:if="{{activeKey === 1}}" class="{{isSel == 2 ? 'selColor': ''}}" bindtap="workerselectTap" data-sel="2">
+            周
+        </button>
+        <button wx:if="{{activeKey === 1}}" class="{{isSel == 3 ? 'selColor': ''}}" bindtap="workerselectTap" data-sel="3">
+            月
+        </button>
+    </view>
+    <view class="main">
+        <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ initPieChart }}" force-use-old-canvas="true"></ec-canvas>
+    </view>
+</view>
+<view wx:if="{{analysisName==='公司进度分析'}}" class="chart">
+    <view class="section">
+        <view class="section__title">选择项目</view>
+        <picker bindchange="bind_Project_PickerChange" value="{{Project_index}}" range="{{Project_array}}">
+            <view class="picker">当前选择：{{Project_array[Project_index]}}</view>
+        </picker>
+    </view>
+    <view class="section">
+        <view class="section__title">选择进度计算依据</view>
+        <picker bindchange="bind_Work_PickerChange" value="{{Work_index}}" range="{{Work_array}}">
+            <view class="picker">当前选择：{{Work_array[Work_index]}}</view>
+        </picker>
+    </view>
+    <van-button type="primary" block bind:click="generate_chart_gis">生成分析图表</van-button>
+</view>
+<view class="chart-container">
+    <image class="chart-image" src="{{chartImageUrl}}" mode="widthFix" bindtap="previewImage" />
+</view>
